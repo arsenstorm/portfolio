@@ -37,6 +37,14 @@ a {
     position: relative;
 }
 
+i {
+    transition: opacity 300ms ease;
+}
+
+i:hover {
+    opacity: 0.7;
+}
+
 .link__hover-effect:after {
     content: "";
     position: absolute;
@@ -80,10 +88,11 @@ li {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
+    padding: 0 12px;
 }
 
-.text--purple {
-    color: #6030b1;
+.text--orange {
+    color: #ff4d00;
 }
 
 section:nth-child(even) {
@@ -104,6 +113,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 12px;
 }
 
 .nav__link--list {
@@ -118,7 +128,7 @@ nav {
 }
 
 .nav__link--anchor-primary {
-    background-color: #6030b1;
+    background-color: #ff4d00;
     padding: 8px 20px;
     border-radius: 50px;
     color: white;
@@ -126,13 +136,11 @@ nav {
 }
 
 .nav__link--anchor-primary:hover {
-    background-color: #5d3eff'
-
+    background-color: #ff783e;
 }
 
 .personal__logo {
     font-size: 24px;
-    color: #6030b1;
     margin: 0 12px;
     font-weight: bold;
 }
@@ -157,6 +165,7 @@ nav {
     max-width: 600px;
     margin: 0 auto;
     text-align: center;
+    padding-bottom: 40px;
 }
 
 .about-me__picture--mask {
@@ -166,6 +175,7 @@ nav {
     overflow: hidden;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.16);
     margin-bottom: 28px;
+    animation: animate-profile 800ms 200ms backwards;
 }
 
 .about-me__picture {
@@ -178,11 +188,13 @@ nav {
 
 .about-me__info--title {
     margin-bottom: 16px;
+    animation: fade-up 650ms 400ms backwards;
 }
 
 .about-me__info--para {
     font-size: 20px;
     margin-bottom: 28px;
+    animation: fade-up 650ms 600ms backwards;
 }
 
 .about-me__link {
@@ -190,6 +202,21 @@ nav {
     color: #242424;
     text-decoration: none;
     padding: 0 16px;
+}
+
+.about-me__links {
+    animation: fade-up 650ms 800ms backwards;
+}
+
+@keyframes fade-up {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .about-me__img--container {
@@ -200,6 +227,46 @@ nav {
 
 .about-me__img {
     width: 100%;
+    animation: fade-in 1200ms 800ms backwards;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+    
+}
+
+@keyframes animate-profile {
+    0% {
+        transform: scale(0);
+    }
+    80% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.wave {
+    display: inline-block;
+    animation: animate-wave 500ms infinite ease-in-out;
+}
+
+@keyframes animate-wave {
+    0% {
+        transform: rotate(0);
+    }
+    50% {
+        transform: rotate(30deg);
+    }
+    100% {
+        transform: rotate(0);
+    }
 }
 
 /* languages */
@@ -232,6 +299,7 @@ nav {
 
 .language__list {
     display: flex;
+    justify-content: center;
     width: 100%;
     flex-wrap: wrap;
 }
@@ -295,7 +363,7 @@ nav {
     filter: blur(5px);
 }
 
-.project:hover .project__description { 
+.project:hover .project__description {
     opacity: 1;
     transform: translateY(-50%);
 }
@@ -326,7 +394,6 @@ nav {
 .project__description--link {
     font-size: 20px;
     margin-right: 16px;
-    text-decoration: none;
 }
 
 .project__description--para,
@@ -389,4 +456,61 @@ footer {
     opacity: 1;
 }
 
-/* https://youtu.be/C8BlRjB3vYI?t=4265 */
+@media (max-width: 768px) {
+    nav {
+      height: 68px;
+    }
+  
+    h1 {
+      font-size: 28px;
+    }
+  
+    .about-me__info--para {
+      font-size: 18px;
+    }
+  
+    .language {
+      width: calc(100% / 3);
+    }
+  
+    .project__description--para {
+      font-size: 14px;
+    }
+  
+    .project__description {
+      left: 30px;
+      padding-right: 30px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .nav__link:not(:last-child) {
+      display: none;
+    }
+  
+    .project__description {
+      padding: 0;
+      left: 0;
+      width: 100%;
+    }
+  
+    .project__description--para {
+      display: none;
+    }
+  
+    .project__description--links {
+      display: flex;
+      justify-content: center;
+    }
+  
+    .project__description--title {
+      font-size: 32px;
+      line-height: 1;
+      text-align: center;
+    }
+  
+    .project__description--sub-title {
+      text-align: center;
+      margin: 12px 0;
+    }
+  }

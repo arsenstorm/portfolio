@@ -13,16 +13,16 @@
 <body>
   <section id="about-me">
     <nav>
-      <div class="personal__logo">Arsen Storm</div>
+      <div class="personal__logo text--orange">Arsen Storm</div>
       <ul class="nav__link--list">
-        <li>
+        <li class="nav__link">
           <a href="#languages" class="nav__link--anchor link__hover-effect link__hover-effect--black">Language</a>
         </li>
-        <li>
+        <li class="nav__link">
           <a href="#projects" class="nav__link--anchor link__hover-effect link__hover-effect--black">Projects</a>
         </li>
-        <li>
-          <a href="#Contact" class="nav__link--anchor nav__link--anchor-primary">Contact</a>
+        <li class="nav__link">
+          <a href="mailto:me@astorm.dev" class="nav__link--anchor nav__link--anchor-primary">Contact</a>
         </li>
       </ul>
     </nav>
@@ -33,12 +33,11 @@
             <img src="./assets/profile.jpg" alt="Arsen Storm" class="about-me__picture">
           </figure>
           <h1 class="about-me__info--title">
-            Hey! I'm <span class="text--purple">Arsen Storm</span>👋
+            Hey! I'm <span class="text--orange">Arsen Storm</span>&nbsp<span class="wave">👋</span>
           </h1>
           <p class="about-me__info--para">
-            I'm a <strong class="text--purple">frontend software engineer</strong> with a strong passion for building
-            responsive and performant web
-            applications with great user experiences that positively impacts the world.
+            I'm a <strong class="text--orange">full stack engineer</strong> with a strong passion for building
+            responsive applications that positively impacts the world.
           </p>
           <div class="about-me__links">
             <a href="https://www.linkedin.com/in/arsenstorm/" class="about-me__link">
@@ -50,13 +49,13 @@
             <a href="mailto:me@astorm.dev" class="about-me__link">
               <i class="far fa-envelope"></i>
             </a>
-            <a href="./resume.pdf" class="about-me__link" download>
+            <a href="./resume.pdf" class="about-me__link" target="_blank">
               <i class="fas fa-file-pdf"></i>
             </a>
           </div>
         </div>
         <figure class="about-me__img--container">
-          <img src="./assets/landing.svg" class="about-me__img" alt="">
+          <img src="./assets/landing.svg" class="about-me__img" alt="" id="landingImage">
         </figure>
       </div>
     </div>
@@ -64,7 +63,7 @@
   <section id="languages">
     <div class="container">
       <div class="row">
-        <h1 class="section__title">This is my <span class="text--purple">technology stack</span></h1>
+        <h1 class="section__title">This is my <span class="text--orange">technology stack</span></h1>
         <div class="language__list">
           <div class="language">
             <figure class="language__img--wrapper">
@@ -95,6 +94,30 @@
             </figure>
             <span class="language__name">React</span>
           </div>
+          <div class="language">
+            <figure class="language__img--wrapper">
+              <img src="./assets/c.png" alt="C++ Logo" class="language__img" />
+            </figure>
+            <span class="language__name">C++</span>
+          </div>
+          <div class="language">
+            <figure class="language__img--wrapper">
+              <img src="./assets/python.png" alt="Python Logo" class="language__img" />
+            </figure>
+            <span class="language__name">Python</span>
+          </div>
+          <div class="language">
+            <figure class="language__img--wrapper">
+              <img src="./assets/php.png" alt="PHP Logo" class="language__img" />
+            </figure>
+            <span class="language__name">PHP</span>
+          </div>
+          <div class="language">
+            <figure class="language__img--wrapper">
+              <img src="./assets/rust.png" alt="Rust Logo" class="language__img" />
+            </figure>
+            <span class="language__name">Rust</span>
+          </div>
         </div>
       </div>
     </div>
@@ -103,7 +126,7 @@
     <div class="container">
       <div class="row">
         <h1 class="section__title">
-          Here are some of my <span class="text--purple">projects</span>
+          Here are some of my <span class="text--orange">projects</span>
         </h1>
         <ul class="project__list">
           <!-- Project One -->
@@ -122,12 +145,12 @@
                   voluptas reiciendis molestiae in ipsum expedita non, iure recusandae provident totam perspiciatis
                   vitae ex minus nulla?
                 </p>
-                <div class="project__description--link">
+                <div class="project__description--links">
                   <a href="https://github.com/arsenstorm" target="_blank" class="project__description--link">
                     <i class="fab fa-github"></i>
                   </a>
                   <a href="https://0n00.app/" target="_blank" class="project__description--link">
-                    <i class="fab fa-link"></i>
+                    <i class="fas fa-link"></i>
                   </a>
                 </div>
               </div>
@@ -154,7 +177,7 @@
                     <i class="fab fa-github"></i>
                   </a>
                   <a href="https://0n00.app/" target="_blank" class="project__description--link">
-                    <i class="fab fa-link"></i>
+                    <i class="fas fa-link"></i>
                   </a>
                 </div>
               </div>
@@ -215,6 +238,16 @@
       <div class="footer__copyright">Copyright &copy; 2022 Arsen Storm</div>
     </div>
   </footer>
+  <script>
+    window.onload = choosePic;
+
+    var possiblePictures = new Array("./assets/1.svg", "./assets/2.svg", "./assets/3.svg", "./assets/4.svg");
+
+    function choosePic() {
+      var randomNum = Math.floor(Math.random() * possiblePictures.length);
+      document.getElementById("landingImage").src = possiblePictures[randomNum];
+    }
+  </script>
 </body>
 
 </html>
