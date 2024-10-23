@@ -7,7 +7,7 @@ export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
 	const ip = ipAddress(req) ?? "";
-	const _headers = headers();
+	const _headers = await headers();
 	const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 	const defaultUnknown = "Somewhere else in the world";
 
