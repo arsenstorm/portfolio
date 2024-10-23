@@ -1,11 +1,31 @@
+"use client";
+
 import clsx from "clsx";
+import { useEffect, useRef } from "react";
 
 export default function WritingLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
+	const ref = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (ref.current) {
+			const elements = ref.current.querySelectorAll(":scope > *");
+			elements.forEach((el, index) => {
+				(el as HTMLElement).style.setProperty(
+					"--stagger-index",
+					index.toString(),
+				);
+			});
+		}
+	}, []);
+
 	return (
 		<div
+			ref={ref}
 			className={clsx(
+				// Animations
+				"orchestration",
 				// Base
 				"prose dark:prose-invert",
 				// Headings
