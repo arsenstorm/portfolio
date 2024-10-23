@@ -9,8 +9,7 @@ import clsx from "clsx";
 import CursorPointer from "@/icons/pointer.svg";
 
 // Components
-import { SelfCursor } from "./self-cursor";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 // Colours
 import { type Color, colors, cursorColors } from "./colours";
@@ -48,9 +47,7 @@ export function CursorsProvider({
 					hidden={props.presence.idle}
 				/>
 			)}
-			className="min-h-screen min-w-screen"
 		>
-			<SelfCursor color={color} />
 			{children}
 		</Cursors>
 	);

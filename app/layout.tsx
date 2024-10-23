@@ -23,7 +23,9 @@ export default async function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`${inter.className} bg-zinc-50 dark:bg-zinc-950`}>
-				{children}
+				<div className="max-w-2xl mx-auto text-zinc-950 dark:text-zinc-50 py-24 px-4">
+					{children}
+				</div>
 				<Analytics />
 			</body>
 		</html>

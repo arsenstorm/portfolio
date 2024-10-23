@@ -1,4 +1,4 @@
-# zero portfolio
+# portfolio
 
 i don’t like portfolios, but i made one anyway.
 

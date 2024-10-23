@@ -3,13 +3,20 @@ import { headers } from "next/headers";
 import { kv } from "@vercel/kv";
 import { type NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge"
+export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
 	const ip = ipAddress(req) ?? "";
 	const _headers = headers();
 	const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 	const defaultUnknown = "Somewhere else in the world";
+
+	if (process.env.NODE_ENV === "development") {
+		return NextResponse.json({
+			lastVisitor: defaultUnknown,
+			currentVisitor: defaultUnknown,
+		});
+	}
 
 	let setLastVisitor = "";
 	let lastVisitor = "";

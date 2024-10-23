@@ -17,7 +17,7 @@ export default function Portfolio({
 	let indexCount = 0;
 
 	return (
-		<div className="orchestration flex flex-col gap-y-4 max-w-2xl mx-auto text-zinc-950 dark:text-zinc-50 py-24 px-4">
+		<div className="orchestration flex flex-col gap-y-4">
 			<Heading>Arsen Shkrumelyak</Heading>
 			<Divider className="my-4" />
 			{intro.map((item) => {
@@ -191,6 +191,34 @@ export default function Portfolio({
 					LinkedIn
 				</TextLink>
 				.
+			</Text>
+			<Divider
+				className="my-4"
+				style={
+					{
+						"--stagger-index": indexCount + 9,
+					} as React.CSSProperties
+				}
+			/>
+			<Subheading
+				level={2}
+				style={
+					{
+						"--stagger-index": indexCount + 10,
+					} as React.CSSProperties
+				}
+			>
+				Writing
+			</Subheading>
+			<Text
+				style={
+					{
+						"--stagger-index": indexCount + 11,
+					} as React.CSSProperties
+				}
+			>
+				I sometimes write stuff. You can find it{" "}
+				<TextLink href="/writing">on this page</TextLink>.
 			</Text>
 		</div>
 	);
