@@ -1,4 +1,6 @@
-import createMDX from '@next/mdx'
+import createMDX from "@next/mdx";
+
+import rehypeStagger from "@/mdx/rehype.mjs";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -23,6 +25,10 @@ const nextConfig = {
 	},
 };
 
-export const withMDX = createMDX();
+export const withMDX = createMDX({
+	options: {
+		rehypePlugins: [rehypeStagger],
+	},
+});
 
 export default withMDX(nextConfig);
