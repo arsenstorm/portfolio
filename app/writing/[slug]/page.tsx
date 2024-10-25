@@ -5,19 +5,21 @@ import clsx from "clsx";
 import { formatDate } from "@/utils/format-date";
 import { getAllWriting } from "@/utils/get-all-writing";
 
+// MDX
+import WritingsPage from "@/mdx/compile";
+
 // Types
 import type { Metadata } from "next";
+import { Divider } from "@/components/ui/divider";
 
-export async function generateMetadata(_: any, state: any): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: { params: Promise<{ slug: string }> }): Promise<Metadata> {
 	const [writings] = await Promise.all([getAllWriting()]);
-	const pathname = Object.getOwnPropertySymbols(state)
-		.map((item) => state[item])
-		.find((state) => Object.hasOwn(state, "url"))?.url?.pathname;
 
-	const slug = pathname?.split("/").pop();
+	const { slug } = await params;
+
 	const writing = writings.find((w) => w.slug === slug);
-
-	console.log(slug, writing);
 
 	if (!writing) {
 		return {};
@@ -41,9 +43,14 @@ export async function generateMetadata(_: any, state: any): Promise<Metadata> {
 	};
 }
 
-export default function WritingLayout({
-	children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default async function WritingPage({
+	params,
+}: Readonly<{ params: Promise<{ slug: string }> }>) {
+	const { slug } = await params;
+	const [writings] = await Promise.all([getAllWriting()]);
+
+	const writing = writings.find((w) => w.slug === slug);
+
 	return (
 		<div
 			className={clsx(
@@ -71,7 +78,9 @@ export default function WritingLayout({
 				"prose-hr:my-8 prose-hr:border-zinc-950/10 prose-hr:dark:border-white/10",
 			)}
 		>
-			{children}
+			<h1>{writing?.title}</h1>
+			<Divider />
+			<WritingsPage slug={slug} />
 		</div>
 	);
 }

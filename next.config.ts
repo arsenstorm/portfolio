@@ -1,10 +1,7 @@
-import createMDX from "@next/mdx";
-
-import rehypeStagger from "@/mdx/rehype.mjs";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+	transpilePackages: ["next-mdx-remote"],
 	webpack(config: any) {
 		config.module.rules.push({
 			test: /\.svg$/i,
@@ -25,10 +22,4 @@ const nextConfig = {
 	},
 };
 
-export const withMDX = createMDX({
-	options: {
-		rehypePlugins: [rehypeStagger],
-	},
-});
-
-export default withMDX(nextConfig);
+export default nextConfig;

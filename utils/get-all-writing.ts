@@ -1,17 +1,36 @@
+// Glob
 import glob from "fast-glob";
 
+// Node
+import path from "node:path";
+import { readFile } from "node:fs/promises";
+
+// MDX
+import { compileMDX } from "next-mdx-remote/rsc";
+
 async function importWriting(filename: string) {
-	const { writing } = await import(`../app/writing/(work)/${filename}`);
+	const filePath = path.join(process.cwd(), "writings", filename);
+	const markdown = await readFile(filePath, { encoding: "utf8" });
+
+	// Parse the file with compileMDX to extract frontmatter
+	const { frontmatter } = await compileMDX({
+		source: markdown,
+		options: { parseFrontmatter: true },
+	});
 
 	return {
 		slug: filename.replace(/(\/page)?\.mdx$/, ""),
-		...writing,
+		...frontmatter,
+	} as {
+		slug: string;
+		title: string;
+		date: string;
 	};
 }
 
 export async function getAllWriting() {
-	const writingFilenames = await glob("*/page.mdx", {
-		cwd: "./app/writing/(work)",
+	const writingFilenames = await glob("*.mdx", {
+		cwd: "./writings",
 	});
 
 	let writings = await Promise.all(writingFilenames.map(importWriting));
