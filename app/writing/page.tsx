@@ -6,18 +6,34 @@ import { Code, Strong, Text, TextLink } from "@/components/ui/text";
 // Utils
 import { getAllWriting } from "@/utils/get-all-writing";
 
+// Dates
+import { format } from "date-fns";
+
+function formatWithOrdinal(dateString: string) {
+	return format(new Date(dateString), "do 'of' MMMM");
+}
+
 function WritingItem({
 	href,
 	title,
+	date,
 	index,
-}: Readonly<{ href: string; title: string; index: number }>) {
+}: Readonly<{ href: string; title: string; date: string; index: number }>) {
 	return (
-		<Text
+		<div
 			style={{ "--stagger-index": index } as React.CSSProperties}
-			className="!my-0"
+			className="!my-0 flex items-center"
 		>
-			<TextLink href={href}>{title}</TextLink>
-		</Text>
+			<Text>
+				<TextLink href={href}>{title}</TextLink>
+			</Text>
+
+			<span className="flex-grow mx-4 border-dotted border-t border-zinc-200 dark:border-zinc-900" />
+
+			<Text>
+				<time dateTime={date}>{formatWithOrdinal(date)}</time>
+			</Text>
+		</div>
 	);
 }
 
@@ -75,6 +91,7 @@ export default async function WritingPage() {
 						key={item.slug}
 						href={`/writing/${item.slug}`}
 						title={item.title}
+						date={item.date}
 						index={index + 5}
 					/>
 				))}
