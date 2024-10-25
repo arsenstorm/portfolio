@@ -11,20 +11,20 @@ import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const [_headers, writings] = await Promise.all([headers(), getAllWriting()]);
-	const referer = _headers.get("referer");
-	const slug = referer?.split("/").pop();
+	const url = _headers.get("x-url");
+	const slug = url?.split("/").pop();
 	const writing = writings.find((w) => w.slug === slug);
 
-	console.log(slug, writing);
+	console.log(url, slug, writing);
 
 	if (!writing) {
 		return {
-			metadataBase: new URL(referer ?? "https://arsenstorm.com/writing"),
+			metadataBase: new URL(url ?? "https://arsenstorm.com/writing"),
 		};
 	}
 
 	return {
-		metadataBase: new URL(referer ?? "https://arsenstorm.com/writing"),
+		metadataBase: new URL(url ?? "https://arsenstorm.com/writing"),
 		openGraph: {
 			type: "website",
 			description: "I’m Arsen, a philosopher, tinkerer, and builder.",
