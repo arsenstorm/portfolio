@@ -9,9 +9,11 @@ import { getAllWriting } from "@/utils/get-all-writing";
 
 // Types
 import type { Metadata } from "next";
+import { metadata as layoutMetadata } from "@/app/layout";
 
 export const metadata: Metadata = {
 	openGraph: {
+		...layoutMetadata.openGraph,
 		url: "https://arsenstorm.com/writing",
 	},
 };
