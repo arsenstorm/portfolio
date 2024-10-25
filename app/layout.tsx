@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 		default: "Arsen Shkrumelyak - I build things.",
 		template: "%s | Arsen Shkrumelyak",
 	},
-	description: "",
+	description: "I’m Arsen, a philosopher, tinkerer, and builder.",
 };
 
 export default async function RootLayout({
