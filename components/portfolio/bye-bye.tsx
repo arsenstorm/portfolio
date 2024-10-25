@@ -6,8 +6,8 @@ export function ByeBye() {
 	const documentState = useDocumentVisibility();
 	useDocumentTitle(
 		documentState === "visible"
-			? "arsen shkrumelyak - i build things"
-			: "i guess this is goodbye",
+			? "Arsen Shkrumelyak - I build things."
+			: "I guess this is goodbye",
 	);
 
   return null;
