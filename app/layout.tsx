@@ -16,7 +16,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
 	title: {
 		default: "Arsen Shkrumelyak - I build things.",
-		template: "%s - Arsen Shkrumelyak",
+		template: "%s | Arsen Shkrumelyak",
 	},
 	description: "I’m Arsen, a philosopher, tinkerer, and builder.",
 	metadataBase: new URL("https://arsenstorm.com"),
