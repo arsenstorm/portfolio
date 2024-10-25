@@ -13,6 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
 	const [_headers, writings] = await Promise.all([headers(), getAllWriting()]);
 	const url = _headers.get("x-url");
 	const slug = url?.split("/").pop();
+
+	console.log(writings);
 	const writing = writings.find((w) => w.slug === slug);
 
 	console.log(url, slug, writing);
