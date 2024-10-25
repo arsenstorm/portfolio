@@ -6,7 +6,10 @@ import { headers } from "next/headers";
 import { formatDate } from "@/utils/format-date";
 import { getAllWriting } from "@/utils/get-all-writing";
 
-export async function generateMetadata() {
+// Types
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
 	const [_headers, writings] = await Promise.all([headers(), getAllWriting()]);
 	const slug = _headers.get("referer")?.split("/").pop();
 	const writing = writings.find((w) => w.slug === slug);

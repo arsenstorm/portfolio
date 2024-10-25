@@ -6,7 +6,7 @@ export const runtime = "edge";
 
 const getInterLight = async () => {
 	const response = await fetch(
-		new URL("@/fonts/Inter-Light.woff2", import.meta.url),
+		new URL("@/fonts/Inter-Light.otf", import.meta.url),
 	);
 	const inter = await response.arrayBuffer();
 
@@ -15,7 +15,7 @@ const getInterLight = async () => {
 
 const getInterMedium = async () => {
 	const response = await fetch(
-		new URL("@/fonts/Inter-Medium.woff2", import.meta.url),
+		new URL("@/fonts/Inter-Medium.otf", import.meta.url),
 	);
 	const inter = await response.arrayBuffer();
 
