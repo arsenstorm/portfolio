@@ -2,15 +2,6 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-const getInterLight = async () => {
-	const response = await fetch(
-		new URL("@/fonts/Inter-Light.otf", import.meta.url),
-	);
-	const inter = await response.arrayBuffer();
-
-	return inter;
-};
-
 const getInterMedium = async () => {
 	const response = await fetch(
 		new URL("@/fonts/Inter-Medium.otf", import.meta.url),
@@ -34,13 +25,13 @@ export async function GET() {
 				justifyContent: "center",
 				width: "100%",
 				height: "100%",
+				fontFamily: "Inter Medium",
 			}}
 		>
 			<div
 				style={{
 					color: "#fafafa",
 					fontSize: "72px",
-					fontFamily: "Inter Medium",
 				}}
 			>
 				Arsen Shkrumelyak.
@@ -50,7 +41,6 @@ export async function GET() {
 					color: "#d4d4d8",
 					opacity: 0.5,
 					fontSize: "24px",
-					fontFamily: "Inter Light",
 				}}
 			>
 				I build things.
@@ -63,10 +53,6 @@ export async function GET() {
 				"Cache-Control": "public, max-age=3600, immutable",
 			},
 			fonts: [
-				{
-					name: "Inter Light",
-					data: await getInterLight(),
-				},
 				{
 					name: "Inter Medium",
 					data: await getInterMedium(),
