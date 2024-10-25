@@ -2,16 +2,10 @@
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { Code, Strong, Text, TextLink } from "@/components/ui/text";
+import { formatDate } from "@/utils/format-date";
 
 // Utils
 import { getAllWriting } from "@/utils/get-all-writing";
-
-// Dates
-import { format } from "date-fns";
-
-function formatWithOrdinal(dateString: string) {
-	return format(new Date(dateString), "do 'of' MMMM");
-}
 
 function WritingItem({
 	href,
@@ -31,7 +25,7 @@ function WritingItem({
 			<span className="flex-grow mx-4 border-dotted border-t border-zinc-200 dark:border-zinc-900" />
 
 			<Text>
-				<time dateTime={date}>{formatWithOrdinal(date)}</time>
+				<time dateTime={date}>{formatDate(date)}</time>
 			</Text>
 		</div>
 	);

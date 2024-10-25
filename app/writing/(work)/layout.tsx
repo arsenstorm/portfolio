@@ -1,6 +1,34 @@
-"use client";
-
+// UI
 import clsx from "clsx";
+
+// Utils
+import { headers } from "next/headers";
+import { formatDate } from "@/utils/format-date";
+import { getAllWriting } from "@/utils/get-all-writing";
+
+export async function generateMetadata() {
+	const [_headers, writings] = await Promise.all([headers(), getAllWriting()]);
+	const slug = _headers.get("referer")?.split("/").pop();
+	const writing = writings.find((w) => w.slug === slug);
+
+	return {
+		metadataBase: new URL("https://arsenstorm.com/writing"),
+		openGraph: {
+			type: "website",
+			description: "I’m Arsen, a philosopher, tinkerer, and builder.",
+			siteName: "Arsen Shkrumelyak",
+			images: [
+				{
+					url: `/og/writing/?title=${writing?.title}&date=${formatDate(
+						writing?.date,
+					)}`,
+					width: 1200,
+					height: 630,
+				},
+			],
+		},
+	};
+}
 
 export default function WritingLayout({
 	children,

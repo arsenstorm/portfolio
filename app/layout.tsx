@@ -16,9 +16,22 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
 	title: {
 		default: "Arsen Shkrumelyak - I build things.",
-		template: "%s | Arsen Shkrumelyak",
+		template: "%s - Arsen Shkrumelyak",
 	},
 	description: "I’m Arsen, a philosopher, tinkerer, and builder.",
+	metadataBase: new URL("https://arsenstorm.com"),
+	openGraph: {
+		type: "website",
+		description: "I’m Arsen, a philosopher, tinkerer, and builder.",
+		siteName: "Arsen Shkrumelyak",
+		images: [
+			{
+				url: "/og",
+				width: 1200,
+				height: 630,
+			},
+		],
+	},
 };
 
 export default async function RootLayout({
