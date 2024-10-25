@@ -6,7 +6,7 @@ export const runtime = "edge";
 
 const getInterMedium = async () => {
 	const response = await fetch(
-		new URL("@/fonts/Inter-Medium.otf", import.meta.url),
+		new URL("@/fonts/Inter-Medium.ttf", import.meta.url),
 	);
 	const inter = await response.arrayBuffer();
 
