@@ -12,6 +12,7 @@ import type { Metadata } from "next";
 import { metadata as layoutMetadata } from "@/app/layout";
 
 export const metadata: Metadata = {
+	title: "Writing",
 	openGraph: {
 		...layoutMetadata.openGraph,
 		url: "https://arsenstorm.com/writing",

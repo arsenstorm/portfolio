@@ -26,6 +26,7 @@ export async function generateMetadata({
 	}
 
 	return {
+		title: writing?.title,
 		openGraph: {
 			type: "website",
 			url: `https://arsenstorm.com/writing/${writing?.slug}`,
