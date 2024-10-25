@@ -2,31 +2,28 @@
 import clsx from "clsx";
 
 // Utils
-import { headers } from "next/headers";
 import { formatDate } from "@/utils/format-date";
 import { getAllWriting } from "@/utils/get-all-writing";
 
 // Types
 import type { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
-	const [_headers, writings] = await Promise.all([headers(), getAllWriting()]);
-	const url = _headers.get("x-url");
-	const slug = url?.split("/").pop();
+export async function generateMetadata(_: any, state: any): Promise<Metadata> {
+	const [writings] = await Promise.all([getAllWriting()]);
+	const pathname = Object.getOwnPropertySymbols(state)
+		.map((item) => state[item])
+		.find((state) => Object.hasOwn(state, "url"))?.url?.pathname;
 
-	console.log(writings);
+	const slug = pathname?.split("/").pop();
 	const writing = writings.find((w) => w.slug === slug);
 
-	console.log(url, slug, writing);
+	console.log(slug, writing);
 
 	if (!writing) {
-		return {
-			metadataBase: new URL(url ?? "https://arsenstorm.com/writing"),
-		};
+		return {};
 	}
 
 	return {
-		metadataBase: new URL(url ?? "https://arsenstorm.com/writing"),
 		openGraph: {
 			type: "website",
 			description: "I’m Arsen, a philosopher, tinkerer, and builder.",
