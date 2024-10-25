@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 	metadataBase: new URL("https://arsenstorm.com"),
 	openGraph: {
 		type: "website",
+		url: "https://arsenstorm.com",
 		description: "I’m Arsen, a philosopher, tinkerer, and builder.",
 		siteName: "Arsen Shkrumelyak",
 		images: [

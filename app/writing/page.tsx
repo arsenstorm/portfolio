@@ -7,6 +7,15 @@ import { formatDate } from "@/utils/format-date";
 // Utils
 import { getAllWriting } from "@/utils/get-all-writing";
 
+// Types
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	openGraph: {
+		url: "https://arsenstorm.com/writing",
+	},
+};
+
 function WritingItem({
 	href,
 	title,
