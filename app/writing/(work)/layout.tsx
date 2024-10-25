@@ -14,6 +14,14 @@ export async function generateMetadata(): Promise<Metadata> {
 	const slug = _headers.get("referer")?.split("/").pop();
 	const writing = writings.find((w) => w.slug === slug);
 
+	if (!writing) {
+		return {
+			metadataBase: new URL("https://arsenstorm.com/writing"),
+		};
+	}
+
+	console.log(slug, writing);
+
 	return {
 		metadataBase: new URL("https://arsenstorm.com/writing"),
 		openGraph: {
