@@ -1,7 +1,7 @@
 // UI
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
-import { Text, TextLink } from "@/components/ui/text";
+import { Code, Strong, Text, TextLink } from "@/components/ui/text";
 
 // Utils
 import { getAllWriting } from "@/utils/get-all-writing";
@@ -25,7 +25,7 @@ export default async function WritingPage() {
 	const writings = await getAllWriting();
 
 	return (
-		<div className="orchestration flex flex-col">
+		<div className="orchestration flex flex-col gap-y-4">
 			<Heading
 				style={
 					{
@@ -35,6 +35,14 @@ export default async function WritingPage() {
 			>
 				I write stuff.
 			</Heading>
+			<Divider
+				className="my-4"
+				style={
+					{
+						"--stagger-index": 2,
+					} as React.CSSProperties
+				}
+			/>
 			<Text
 				style={
 					{
@@ -42,13 +50,22 @@ export default async function WritingPage() {
 					} as React.CSSProperties
 				}
 			>
-				I do it when I get bored—otherwise, I’m building cool stuff.
+				I write when I’m <Code>bored</Code>.
+			</Text>
+			<Text
+				style={
+					{
+						"--stagger-index": 3,
+					} as React.CSSProperties
+				}
+			>
+				Otherwise, I’m <Strong>building</Strong> cool stuff.
 			</Text>
 			<Divider
 				className="my-4"
 				style={
 					{
-						"--stagger-index": 3,
+						"--stagger-index": 4,
 					} as React.CSSProperties
 				}
 			/>
@@ -58,7 +75,7 @@ export default async function WritingPage() {
 						key={item.slug}
 						href={`/writing/${item.slug}`}
 						title={item.title}
-						index={index + 4}
+						index={index + 5}
 					/>
 				))}
 			</div>

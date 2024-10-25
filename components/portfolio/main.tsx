@@ -130,9 +130,9 @@ export default function Portfolio({
 					} as React.CSSProperties
 				}
 			>
-				If you’re unfortunate enough to stumble across my site when no one is
-				around, you’ll only see one cursor—<Strong>yours</Strong>. Otherwise,
-				you’ll see <Strong>everyone</Strong> else’s (and they’ll see yours)!
+				If you’re fortunate enough to stumble across my site when others are
+				around, you’ll see <Strong>everyone else’s</Strong> cursor flying
+				around!
 			</Text>
 			<WhereIsLastVisitor
 				lastVisitor={lastVisitor}
@@ -165,12 +165,40 @@ export default function Portfolio({
 					} as React.CSSProperties
 				}
 			>
-				Connect
+				Writing
 			</Subheading>
 			<Text
 				style={
 					{
 						"--stagger-index": indexCount + 8,
+					} as React.CSSProperties
+				}
+			>
+				I sometimes write stuff. You can find it{" "}
+				<TextLink href="/writing">on this page</TextLink>.
+			</Text>
+			<Divider
+				className="my-4"
+				style={
+					{
+						"--stagger-index": indexCount + 9,
+					} as React.CSSProperties
+				}
+			/>
+			<Subheading
+				level={2}
+				style={
+					{
+						"--stagger-index": indexCount + 10,
+					} as React.CSSProperties
+				}
+			>
+				Connect
+			</Subheading>
+			<Text
+				style={
+					{
+						"--stagger-index": indexCount + 11,
 					} as React.CSSProperties
 				}
 			>
@@ -191,34 +219,6 @@ export default function Portfolio({
 					LinkedIn
 				</TextLink>
 				.
-			</Text>
-			<Divider
-				className="my-4"
-				style={
-					{
-						"--stagger-index": indexCount + 9,
-					} as React.CSSProperties
-				}
-			/>
-			<Subheading
-				level={2}
-				style={
-					{
-						"--stagger-index": indexCount + 10,
-					} as React.CSSProperties
-				}
-			>
-				Writing
-			</Subheading>
-			<Text
-				style={
-					{
-						"--stagger-index": indexCount + 11,
-					} as React.CSSProperties
-				}
-			>
-				I sometimes write stuff. You can find it{" "}
-				<TextLink href="/writing">on this page</TextLink>.
 			</Text>
 		</div>
 	);

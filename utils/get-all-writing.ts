@@ -1,7 +1,7 @@
 import glob from "fast-glob";
 
 async function importWriting(filename: string) {
-	const { writing } = await import(`../app/writing/${filename}`);
+	const { writing } = await import(`../app/writing/(work)/${filename}`);
 
 	return {
 		slug: filename.replace(/(\/page)?\.mdx$/, ""),
@@ -11,7 +11,7 @@ async function importWriting(filename: string) {
 
 export async function getAllWriting() {
 	const writingFilenames = await glob("*/page.mdx", {
-		cwd: "./app/writing",
+		cwd: "./app/writing/(work)",
 	});
 
 	let writings = await Promise.all(writingFilenames.map(importWriting));

@@ -28,6 +28,8 @@ export default function WritingLayout({
 				"prose-blockquote:border-l-2 prose-blockquote:border-zinc-300 prose-blockquote:dark:border-zinc-700",
 				"prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:font-medium",
 				"prose-blockquote:text-zinc-950 dark:prose-blockquote:text-zinc-50",
+				// Dividers
+				"prose-hr:my-8 prose-hr:border-zinc-950/10 prose-hr:dark:border-white/10",
 			)}
 		>
 			{children}
