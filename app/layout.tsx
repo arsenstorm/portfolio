@@ -14,7 +14,10 @@ import { ThemeProvider } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "arsen shkrumelyak - i build things",
+	title: {
+		default: "Arsen Shkrumelyak - I build things.",
+		template: "%s | Arsen Shkrumelyak",
+	},
 	description: "",
 };
 
