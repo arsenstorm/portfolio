@@ -1,10 +1,10 @@
 import { visit } from "unist-util-visit";
 
-let staggerIndex = 0;
+let staggerIndex = 2; // Start from 2 to account for the heading and divider
 
 const rehypeStagger = () => {
 	return (tree) => {
-		staggerIndex = 0;
+		staggerIndex = 2;
 		visit(tree, "element", (node) => {
 			if (node.tagName === "a") {
 				return;
