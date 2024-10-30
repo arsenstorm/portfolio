@@ -34,8 +34,8 @@ export async function generateMetadata({
 			siteName: "Arsen Shkrumelyak",
 			images: [
 				{
-					url: `/og/writing/?title=${writing?.title}&date=${formatDate(
-						writing?.date,
+					url: `/og/writing/?title=${encodeURIComponent(writing?.title)}&date=${encodeURIComponent(
+						formatDate(writing?.date),
 					)}`,
 					width: 1200,
 					height: 630,

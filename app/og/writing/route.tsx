@@ -18,8 +18,8 @@ const getInterMedium = async () => {
  */
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
-	const title = searchParams.get("title") ?? "";
-	const date = searchParams.get("date") ?? "1st of January";
+	const title = decodeURIComponent(searchParams.get("title") ?? "");
+	const date = decodeURIComponent(searchParams.get("date") ?? "1st of January");
 
 	return new ImageResponse(
 		<div
