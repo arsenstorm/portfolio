@@ -4,6 +4,9 @@
 import Portfolio from "@/components/portfolio/main";
 import { CursorsProvider } from "@/components/cursors/cursors";
 import { ByeBye } from "@/components/portfolio/bye-bye";
+import { EscapeTitle } from "@/components/escape";
+
+// React
 import { useState, useEffect } from "react";
 
 export default function PortfolioPage() {
@@ -20,9 +23,12 @@ export default function PortfolioPage() {
 	}, []);
 
 	return (
-		<CursorsProvider location={currentVisitor || "Unknown"}>
-			<Portfolio lastVisitor={lastVisitor || "Unknown"} />
-			<ByeBye />
-		</CursorsProvider>
+		<>
+			<EscapeTitle title="Arsen Shkrumelyak" />
+			<CursorsProvider location={currentVisitor || "Unknown"}>
+				<Portfolio lastVisitor={lastVisitor || "Unknown"} />
+				<ByeBye />
+			</CursorsProvider>
+		</>
 	);
 }

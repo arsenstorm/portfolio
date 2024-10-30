@@ -10,7 +10,7 @@ import WritingsPage from "@/mdx/compile";
 
 // Types
 import type { Metadata } from "next";
-import { Divider } from "@/components/ui/divider";
+import { EscapeTitle } from "@/components/escape";
 
 export async function generateMetadata({
 	params,
@@ -58,6 +58,8 @@ export default async function WritingPage({
 			className={clsx(
 				// Animations
 				"orchestration",
+				// Remove gap
+				"-mt-4",
 				// Base
 				"prose dark:prose-invert",
 				// Headings
@@ -84,22 +86,7 @@ export default async function WritingPage({
 				"prose-hr:my-8 prose-hr:border-zinc-950/10 prose-hr:dark:border-white/10",
 			)}
 		>
-			<h1
-				style={
-					{
-						"--stagger-index": 0,
-					} as React.CSSProperties
-				}
-			>
-				{writing?.title}
-			</h1>
-			<Divider
-				style={
-					{
-						"--stagger-index": 1,
-					} as React.CSSProperties
-				}
-			/>
+			<EscapeTitle title={writing?.title ?? "Untitled."} />
 			<WritingsPage slug={slug} />
 		</div>
 	);

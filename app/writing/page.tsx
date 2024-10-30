@@ -1,6 +1,5 @@
 // UI
 import { Divider } from "@/components/ui/divider";
-import { Heading } from "@/components/ui/heading";
 import { Code, Strong, Text, TextLink } from "@/components/ui/text";
 import { formatDate } from "@/utils/format-date";
 
@@ -10,6 +9,9 @@ import { getAllWriting } from "@/utils/get-all-writing";
 // Types
 import type { Metadata } from "next";
 import { metadata as layoutMetadata } from "@/app/layout";
+
+// Components
+import { EscapeTitle } from "@/components/escape";
 
 export const metadata: Metadata = {
 	title: "Writing",
@@ -47,24 +49,8 @@ export default async function WritingPage() {
 	const writings = await getAllWriting();
 
 	return (
-		<div className="orchestration flex flex-col gap-y-4">
-			<Heading
-				style={
-					{
-						"--stagger-index": 1,
-					} as React.CSSProperties
-				}
-			>
-				I write stuff.
-			</Heading>
-			<Divider
-				className="my-4"
-				style={
-					{
-						"--stagger-index": 2,
-					} as React.CSSProperties
-				}
-			/>
+		<>
+			<EscapeTitle title="I write stuff." />
 			<Text
 				style={
 					{
@@ -102,6 +88,6 @@ export default async function WritingPage() {
 					/>
 				))}
 			</div>
-		</div>
+		</>
 	);
 }

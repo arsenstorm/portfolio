@@ -1,6 +1,6 @@
 "use client";
 
-import { Heading, Subheading } from "@/components/ui/heading";
+import { Subheading } from "@/components/ui/heading";
 import { Code, Strong, Text, TextLink } from "@/components/ui/text";
 import clsx from "clsx";
 
@@ -14,12 +14,10 @@ export default function Portfolio({
 }: {
 	readonly lastVisitor?: string;
 }) {
-	let indexCount = 0;
+	let indexCount = 2;
 
 	return (
 		<div className="orchestration flex flex-col gap-y-4">
-			<Heading>Arsen Shkrumelyak</Heading>
-			<Divider className="my-4" />
 			{intro.map((item) => {
 				indexCount++;
 
