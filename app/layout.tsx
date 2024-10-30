@@ -11,6 +11,9 @@ import { Analytics } from "@vercel/analytics/react";
 // Theme
 import { ThemeProvider } from "next-themes";
 
+// View Transitions
+import { ViewTransitions } from "next-view-transitions";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -41,15 +44,17 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
-			<body className={`${inter.className} bg-zinc-50 dark:bg-zinc-950`}>
-				<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-					<div className="max-w-2xl mx-auto text-zinc-950 dark:text-zinc-50 py-24 px-4">
-						{children}
-					</div>
-				</ThemeProvider>
-				<Analytics />
-			</body>
-		</html>
+		<ViewTransitions>
+			<html lang="en" suppressHydrationWarning>
+				<body className={`${inter.className} bg-zinc-50 dark:bg-zinc-950`}>
+					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+						<div className="max-w-2xl mx-auto text-zinc-950 dark:text-zinc-50 py-24 px-4">
+							{children}
+						</div>
+					</ThemeProvider>
+					<Analytics />
+				</body>
+			</html>
+		</ViewTransitions>
 	);
 }
