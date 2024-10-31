@@ -5,18 +5,8 @@ import { Code, Text, TextLink } from "@/components/ui/text";
 
 // Functions
 import { getCommandKey } from "@/utils/get-command-key";
-import { useHotkeys } from "@mantine/hooks";
 
 export function EmailMe({ style }: { readonly style: React.CSSProperties }) {
-	useHotkeys([
-		[
-			"mod+b",
-			() => {
-				window.open("https://arsen.dev/time", "_blank");
-			},
-		],
-	]);
-
 	const { key, device } = getCommandKey();
 
 	return (

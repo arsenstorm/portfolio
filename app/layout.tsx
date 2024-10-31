@@ -21,6 +21,9 @@ import { EscapeProvider } from "@/components/design/escape";
 import { CursorsProvider } from "@/components/cursors/cursors";
 import { VisitorProvider } from "@/components/cursors/visitor-context";
 
+// Hotkeys
+import { Hotkeys } from "@/components/portfolio/hotkeys";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -60,6 +63,7 @@ export default async function RootLayout({
 								<EscapeProvider>{children}</EscapeProvider>
 							</CursorsProvider>
 						</VisitorProvider>
+						<Hotkeys />
 					</ThemeProvider>
 					<Analytics />
 				</body>
