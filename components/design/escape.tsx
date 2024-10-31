@@ -25,6 +25,7 @@ import { useHotkeys } from "@mantine/hooks";
 
 // View Transitions
 import { useTransitionRouter } from "next-view-transitions";
+import clsx from "clsx";
 
 const TitleContext = createContext<{
 	title: string;
@@ -88,6 +89,26 @@ export function EscapeProvider({
 						/>
 						{children}
 					</div>
+					<div
+						// Top Gradient
+						className={clsx(
+							// Base
+							"fixed top-0 left-0 right-0 no-orchestration z-10 h-8 pointer-events-none",
+
+							// Gradient
+							"bg-gradient-to-t from-transparent to-zinc-50 dark:to-zinc-950",
+						)}
+					/>
+					<div
+						// Bottom Gradient
+						className={clsx(
+							// Base
+							"fixed bottom-0 left-0 right-0 no-orchestration z-10 h-16 pointer-events-none",
+
+							// Gradient
+							"bg-gradient-to-b from-transparent to-zinc-50 dark:to-zinc-950",
+						)}
+					/>
 				</div>
 			</div>
 		</TitleContext.Provider>

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.no-orchestration > * {
+	animation: none !important;
+}
+
 .orchestration {
 	--delay: 120ms;
 }
