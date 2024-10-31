@@ -87,7 +87,6 @@ export default async function WritingPage({
 					"prose-code:px-0.5 prose-code:text-sm prose-code:font-medium prose-code:text-zinc-950 prose-code:sm:text-[0.8125rem]",
 					"prose-code:dark:border-white/20 prose-code:dark:bg-white/5 prose-code:dark:text-white",
 					// Blockquotes
-					//"prose-blockquote:border-l-2 prose-blockquote:border-zinc-300 prose-blockquote:dark:border-zinc-700 prose-blockquote:pl-4",
 					"prose-blockquote:border-l-0 prose-blockquote:pl-0",
 					"prose-blockquote:italic prose-blockquote:font-medium",
 					"prose-blockquote:text-zinc-950 dark:prose-blockquote:text-zinc-50",
