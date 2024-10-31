@@ -1,19 +1,27 @@
 "use client";
 
+// UI
+import clsx from "clsx";
 import { Subheading } from "@/components/ui/heading";
 import { Code, Strong, Text, TextLink } from "@/components/ui/text";
-import clsx from "clsx";
 
+// Icons
 import OpenInNewTab from "@/icons/open-in-new-tab.svg";
+
+// Components
 import { Divider } from "@/components/ui/divider";
 import { WhereIsLastVisitor } from "./where-is-last-visitor";
 import { EmailMe } from "./email-me";
+
+// Functions
+import { getCommandKey } from "@/utils/get-command-key";
 
 export default function Portfolio({
 	lastVisitor,
 }: {
 	readonly lastVisitor?: string;
 }) {
+	const { device } = getCommandKey();
 	let indexCount = 2;
 
 	return (
@@ -173,7 +181,13 @@ export default function Portfolio({
 				}
 			>
 				I sometimes write stuff. You can find it{" "}
-				<TextLink href="/writing">on this page</TextLink>.
+				<TextLink href="/writing">on this page</TextLink>{" "}
+				{device === "desktop" ? (
+					<>
+						or hit <Code>W</Code>
+					</>
+				) : null}
+				.
 			</Text>
 			<Divider
 				className="my-4"

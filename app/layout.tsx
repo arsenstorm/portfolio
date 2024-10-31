@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 // Styles
+import clsx from "clsx";
 import "@/styles/globals.css";
 
 // Analytics
@@ -56,7 +57,7 @@ export default async function RootLayout({
 	return (
 		<ViewTransitions>
 			<html lang="en" suppressHydrationWarning>
-				<body className={`${inter.className} bg-zinc-50 dark:bg-zinc-950`}>
+				<body className={clsx(inter.className, "bg-zinc-50 dark:bg-zinc-950")}>
 					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
 						<VisitorProvider>
 							<CursorsProvider>
