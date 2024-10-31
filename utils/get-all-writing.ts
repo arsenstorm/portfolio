@@ -8,6 +8,15 @@ import { readFile } from "node:fs/promises";
 // MDX
 import { compileMDX } from "next-mdx-remote/rsc";
 
+export type WritingType = "writing" | "example";
+
+export interface Writing {
+	slug: string;
+	title: string;
+	date: string;
+	type: WritingType;
+}
+
 async function importWriting(filename: string) {
 	const filePath = path.join(process.cwd(), "writings", filename);
 	const markdown = await readFile(filePath, { encoding: "utf8" });
@@ -21,11 +30,8 @@ async function importWriting(filename: string) {
 	return {
 		slug: filename.replace(/(\/page)?\.mdx$/, ""),
 		...frontmatter,
-	} as {
-		slug: string;
-		title: string;
-		date: string;
-	};
+		type: frontmatter?.type ?? "writing",
+	} as Writing;
 }
 
 export async function getAllWriting() {
