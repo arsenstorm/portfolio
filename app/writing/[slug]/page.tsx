@@ -30,7 +30,7 @@ export async function generateMetadata({
 		openGraph: {
 			type: "website",
 			url: `https://arsenstorm.com/writing/${writing?.slug}`,
-			description: "I’m Arsen, a philosopher, tinkerer, and builder.",
+			description: "I’m Arsen, a builder, philosopher, and tinkerer.",
 			siteName: "Arsen Shkrumelyak",
 			images: [
 				{

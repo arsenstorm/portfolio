@@ -28,12 +28,12 @@ export const metadata: Metadata = {
 		default: "Arsen Shkrumelyak - I build things.",
 		template: "%s | Arsen Shkrumelyak",
 	},
-	description: "I’m Arsen, a philosopher, tinkerer, and builder.",
+	description: "I’m Arsen, a builder, philosopher, and tinkerer.",
 	metadataBase: new URL("https://arsenstorm.com"),
 	openGraph: {
 		type: "website",
 		url: "https://arsenstorm.com",
-		description: "I’m Arsen, a philosopher, tinkerer, and builder.",
+		description: "I’m Arsen, a builder, philosopher, and tinkerer.",
 		siteName: "Arsen Shkrumelyak",
 		images: [
 			{
