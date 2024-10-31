@@ -17,6 +17,10 @@ import { ViewTransitions } from "next-view-transitions";
 // Escape
 import { EscapeProvider } from "@/components/design/escape";
 
+// Cursors
+import { CursorsProvider } from "@/components/cursors/cursors";
+import { VisitorProvider } from "@/components/cursors/visitor-context";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -51,9 +55,11 @@ export default async function RootLayout({
 			<html lang="en" suppressHydrationWarning>
 				<body className={`${inter.className} bg-zinc-50 dark:bg-zinc-950`}>
 					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-						<EscapeProvider>
-							{children}
-						</EscapeProvider>
+						<VisitorProvider>
+							<CursorsProvider>
+								<EscapeProvider>{children}</EscapeProvider>
+							</CursorsProvider>
+						</VisitorProvider>
 					</ThemeProvider>
 					<Analytics />
 				</body>

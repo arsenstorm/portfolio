@@ -1,6 +1,6 @@
 "use client";
 
-import { Cursors } from "@instantdb/react";
+import { Cursors as InstantCursors } from "@instantdb/react";
 import { room } from "./get-cursor-room";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
@@ -17,10 +17,24 @@ import { type Color, colors, cursorColors } from "./colours";
 // Hooks
 import { useIdle } from "@mantine/hooks";
 
+// Contexts
+import { useVisitor } from "@/components/cursors/visitor-context";
+
 export function CursorsProvider({
 	children,
-	location = "Someone",
-}: { readonly children: React.ReactNode; readonly location: string }) {
+}: { readonly children: React.ReactNode }) {
+	const { currentVisitor } = useVisitor();
+
+	return <Cursors currentVisitor={currentVisitor}>{children}</Cursors>;
+}
+
+export function Cursors({
+	children,
+	currentVisitor = "Unknown",
+}: {
+	readonly children: React.ReactNode;
+	readonly currentVisitor: string;
+}) {
 	const mouseIdle = useIdle(30000, {
 		events: ["mousemove"],
 	});
@@ -32,13 +46,13 @@ export function CursorsProvider({
 	}, []);
 
 	room.useSyncPresence({
-		location,
+		location: currentVisitor,
 		color,
 		idle: mouseIdle,
 	});
 
 	return (
-		<Cursors
+		<InstantCursors
 			room={room}
 			renderCursor={(props) => (
 				<CustomCursor
@@ -49,7 +63,7 @@ export function CursorsProvider({
 			)}
 		>
 			{children}
-		</Cursors>
+		</InstantCursors>
 	);
 }
 
