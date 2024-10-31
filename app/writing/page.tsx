@@ -1,9 +1,9 @@
 // UI
 import { Divider } from "@/components/ui/divider";
 import { Code, Strong, Text, TextLink } from "@/components/ui/text";
-import { formatDate } from "@/utils/format-date";
 
 // Utils
+import { formatDate } from "@/utils/format-date";
 import { getAllWriting } from "@/utils/get-all-writing";
 
 // Types

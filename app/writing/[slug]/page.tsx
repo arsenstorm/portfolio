@@ -1,5 +1,6 @@
 // UI
 import clsx from "clsx";
+import { Button } from "@/components/ui/button";
 
 // Utils
 import { formatDate } from "@/utils/format-date";
@@ -14,7 +15,6 @@ import { EscapeTitle } from "@/components/design/escape";
 
 // Hotkeys
 import { Hotkeys } from "@/components/hotkeys/writings";
-import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({
 	params,
