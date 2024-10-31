@@ -15,7 +15,7 @@ import { ThemeProvider } from "next-themes";
 import { ViewTransitions } from "next-view-transitions";
 
 // Escape
-import { EscapeProvider } from "@/components/escape";
+import { EscapeProvider } from "@/components/design/escape";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -4,7 +4,7 @@
 import Portfolio from "@/components/portfolio/main";
 import { CursorsProvider } from "@/components/cursors/cursors";
 import { ByeBye } from "@/components/portfolio/bye-bye";
-import { EscapeTitle } from "@/components/escape";
+import { EscapeTitle } from "@/components/design/escape";
 
 // React
 import { useState, useEffect } from "react";

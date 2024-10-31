@@ -10,7 +10,7 @@ import WritingsPage from "@/mdx/compile";
 
 // Types
 import type { Metadata } from "next";
-import { EscapeTitle } from "@/components/escape";
+import { EscapeTitle } from "@/components/design/escape";
 
 export async function generateMetadata({
 	params,

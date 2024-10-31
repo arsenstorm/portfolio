@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 import { metadata as layoutMetadata } from "@/app/layout";
 
 // Components
-import { EscapeTitle } from "@/components/escape";
+import { EscapeTitle } from "@/components/design/escape";
 
 export const metadata: Metadata = {
 	title: "Writing",

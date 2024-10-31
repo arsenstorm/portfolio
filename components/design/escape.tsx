@@ -1,7 +1,6 @@
 "use client";
 
 // Next
-import { Badge } from "./ui/badge";
 import { usePathname } from "next/navigation";
 
 // React
@@ -17,6 +16,7 @@ import {
 // UI
 import { Link } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
+import { Badge } from "@/components/ui/badge";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 
@@ -26,7 +26,6 @@ import { useHotkeys } from "@mantine/hooks";
 // View Transitions
 import { useTransitionRouter } from "next-view-transitions";
 
-// Add title context
 const TitleContext = createContext<{
 	title: string;
 	setTitle: (title: string) => void;
