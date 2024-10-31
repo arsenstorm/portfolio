@@ -6,6 +6,9 @@ import { useTransitionRouter } from "next-view-transitions";
 // Hooks
 import { useHotkeys } from "@mantine/hooks";
 
+// React
+import { useEffect } from "react";
+
 export function Hotkeys({
 	previous,
 	next,
@@ -35,6 +38,11 @@ export function Hotkeys({
 			},
 		],
 	]);
+
+	useEffect(() => {
+		router.prefetch(previous ? `/writing/${previous}` : "/writing");
+		router.prefetch(next ? `/writing/${next}` : "/writing");
+	}, [previous, next, router]);
 
 	return null;
 }
