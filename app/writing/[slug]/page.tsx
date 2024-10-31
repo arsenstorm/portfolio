@@ -14,7 +14,6 @@ import { EscapeTitle } from "@/components/design/escape";
 
 // Hotkeys
 import { Hotkeys } from "@/components/hotkeys/writings";
-import { EmailMe } from "@/components/portfolio/email-me";
 import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({
