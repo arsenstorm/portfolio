@@ -12,6 +12,9 @@ import WritingsPage from "@/mdx/compile";
 import type { Metadata } from "next";
 import { EscapeTitle } from "@/components/design/escape";
 
+// Hotkeys
+import { Hotkeys } from "@/components/hotkeys/writings";
+
 export async function generateMetadata({
 	params,
 }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -51,7 +54,11 @@ export default async function WritingPage({
 	const { slug } = await params;
 	const [writings] = await Promise.all([getAllWriting()]);
 
-	const writing = writings.find((w) => w.slug === slug);
+	const index = writings.findIndex((w) => w.slug === slug);
+
+	const previous = writings?.[index - 1]?.slug;
+	const next = writings?.[index + 1]?.slug;
+	const writing = writings[index];
 
 	return (
 		<div
@@ -88,6 +95,7 @@ export default async function WritingPage({
 		>
 			<EscapeTitle title={writing?.title ?? "Untitled."} />
 			<WritingsPage slug={slug} />
+			<Hotkeys previous={previous} next={next} />
 		</div>
 	);
 }

@@ -22,7 +22,7 @@ import { CursorsProvider } from "@/components/cursors/cursors";
 import { VisitorProvider } from "@/components/cursors/visitor-context";
 
 // Hotkeys
-import { Hotkeys } from "@/components/portfolio/hotkeys";
+import { Hotkeys } from "@/components/hotkeys/main";
 
 const inter = Inter({ subsets: ["latin"] });
 
