@@ -18,7 +18,7 @@ export default async function sitemap({
 	const writings = await getAllWriting();
 	const writingSitemap = writings.slice(start, end).map((writing) => ({
 		url: `https://arsenstorm.com/writing/${writing.slug}`,
-		lastModified: writing.date,
+		lastModified: new Date(writing.date).toISOString(),
 	}));
 
 	const pages = {
