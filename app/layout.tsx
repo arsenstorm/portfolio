@@ -47,6 +47,9 @@ export const metadata: Metadata = {
 			},
 		],
 	},
+	verification: {
+		yandex: "9ac810b78b189227"
+	}
 };
 
 export default async function RootLayout({
