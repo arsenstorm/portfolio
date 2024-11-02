@@ -181,9 +181,10 @@ export default function Portfolio({
 				}
 			>
 				I sometimes write stuff. You can find it{" "}
-				<TextLink href="/writing">on this page</TextLink>{" "}
+				<TextLink href="/writing">on this page</TextLink>
 				{device === "desktop" ? (
 					<>
+						{" "}
 						or hit <Code>W</Code>
 					</>
 				) : null}
