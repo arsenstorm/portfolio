@@ -48,8 +48,8 @@ export const metadata: Metadata = {
 		],
 	},
 	verification: {
-		yandex: "9ac810b78b189227"
-	}
+		yandex: "9ac810b78b189227",
+	},
 };
 
 export default async function RootLayout({
@@ -60,7 +60,12 @@ export default async function RootLayout({
 	return (
 		<ViewTransitions>
 			<html lang="en" suppressHydrationWarning>
-				<body className={clsx(inter.className, "bg-zinc-50 dark:bg-zinc-950")}>
+				<body
+					className={clsx(
+						inter.className,
+						"bg-zinc-50 dark:bg-zinc-950 min-h-screen",
+					)}
+				>
 					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
 						<VisitorProvider>
 							<CursorsProvider>
