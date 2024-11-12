@@ -7,7 +7,7 @@ import { formatDate } from "@/utils/format-date";
 import { getAllWriting } from "@/utils/get-all-writing";
 
 // MDX
-import WritingsPage from "@/mdx/compile";
+import WritingsPage, { readWriting } from "@/mdx/compile";
 
 // Types
 import type { Metadata } from "next";
@@ -29,12 +29,31 @@ export async function generateMetadata({
 		return {};
 	}
 
+	let content: string | null = (
+		(await readWriting(writing.slug)) ?? ""
+	).replace(/---[\s\S]*?---\s*/, "");
+
+	const regex = /^[^.!?]*[.!?]/;
+	const match = regex.exec(content);
+	content = match ? match[0] : content;
+
+	if (content.startsWith(">")) {
+		content = content.slice(1).trim();
+	}
+
+	content = content.replace(/\[/g, "").replace(/\]/g, "");
+
+	if (content.trim() === "") {
+		content = null;
+	}
+
 	return {
 		title: writing?.title,
 		openGraph: {
 			type: "website",
 			url: `https://arsenstorm.com/writing/${writing?.slug}`,
-			description: "I’m Arsen, a builder, philosopher, and tinkerer.",
+			description:
+				content ?? "I’m Arsen, a builder, philosopher, and tinkerer.",
 			siteName: "Arsen Shkrumelyak",
 			images: [
 				{
@@ -63,7 +82,7 @@ export default async function WritingPage({
 
 	return (
 		<>
-			<div
+			<main
 				className={clsx(
 					// Animations
 					"orchestration",
@@ -96,11 +115,12 @@ export default async function WritingPage({
 			>
 				<EscapeTitle title={writing?.title ?? "Untitled."} />
 				<WritingsPage slug={slug} />
+			</main>
+			<footer className="max-w-2xl mx-auto fixed bottom-0 left-0 right-0 px-4 py-8 flex flex-row justify-between items-center z-20 !animate-none !opacity-100">
 				<Hotkeys previous={previous} next={next} />
-			</div>
-			<div className="max-w-2xl mx-auto fixed bottom-0 left-0 right-0 px-4 py-8 flex flex-row justify-between items-center z-20 !animate-none !opacity-100">
 				<Button
 					outline
+					data-nosnippet
 					className="!text-xs !bg-white/50 dark:!bg-zinc-950/50"
 					disabled={!previous}
 					href={previous ? `/writing/${previous}` : undefined}
@@ -109,13 +129,14 @@ export default async function WritingPage({
 				</Button>
 				<Button
 					outline
+					data-nosnippet
 					className="!text-xs !bg-white/50 dark:!bg-zinc-950/50"
 					disabled={!next}
 					href={next ? `/writing/${next}` : undefined}
 				>
 					Next &rarr;
 				</Button>
-			</div>
+			</footer>
 		</>
 	);
 }
