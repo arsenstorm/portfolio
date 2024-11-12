@@ -17,8 +17,10 @@ export interface Writing {
 	type: WritingType;
 }
 
-async function importWriting(filename: string) {
-	const filePath = path.join(process.cwd(), "writings", filename);
+export type ImportWritingOption = "writings" | "writings-future";
+
+async function importWriting(filename: string, type?: ImportWritingOption) {
+	const filePath = path.join(process.cwd(), type ?? "writings", filename);
 	const markdown = await readFile(filePath, { encoding: "utf8" });
 
 	// Parse the file with compileMDX to extract frontmatter
@@ -35,11 +37,21 @@ async function importWriting(filename: string) {
 }
 
 export async function getAllWriting() {
-	const writingFilenames = await glob("*.mdx", {
-		cwd: "./writings",
-	});
+	const [writingFilenames, futureWritingFilenames] = await Promise.all([
+		glob("*.mdx", { cwd: "./writings" }),
+		process.env.NODE_ENV === "production"
+			? []
+			: glob("*.mdx", { cwd: "./writings-future" }),
+	]);
 
-	let writings = await Promise.all(writingFilenames.map(importWriting));
+	let writings = await Promise.all([
+		...writingFilenames.map((filename) => importWriting(filename)),
+		...(process.env.NODE_ENV === "production"
+			? []
+			: futureWritingFilenames.map((filename) =>
+					importWriting(filename, "writings-future"),
+				)),
+	]);
 
 	writings = writings.filter((writing) => writing.slug !== "template");
 

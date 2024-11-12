@@ -13,7 +13,7 @@ import { Link } from "@/components/ui/link";
 // React
 import type { ComponentProps } from "react";
 
-async function readWriting(slug: string) {
+export async function readWriting(slug: string) {
 	const filePath = path.resolve(
 		path.join(process.cwd(), "writings", `${slug}.mdx`),
 	);
@@ -21,6 +21,20 @@ async function readWriting(slug: string) {
 	try {
 		await access(filePath);
 	} catch (err) {
+		if (process.env.NODE_ENV !== "production") {
+			const futureFilePath = path.resolve(
+				path.join(process.cwd(), "writings-future", `${slug}.mdx`),
+			);
+
+			try {
+				await access(futureFilePath);
+			} catch (err) {
+				return null;
+			}
+
+			return await readFile(futureFilePath, { encoding: "utf8" });
+		}
+
 		return null;
 	}
 
