@@ -27,10 +27,20 @@ export async function GET(req: Request) {
 	const writings = await getAllWriting();
 
 	for (const writing of writings) {
-		const content = ((await readWriting(writing.slug)) ?? "").replace(
+		let content = ((await readWriting(writing.slug)) ?? "").replace(
 			/---[\s\S]*?---\s*/,
 			"",
 		);
+
+		const regex = /^[^.!?]*[.!?]/;
+		const match = regex.exec(content);
+		content = match ? match[0] : content;
+
+		if (content.startsWith(">")) {
+			content = content.slice(1).trim();
+		}
+
+		content = content.replace(/\[/g, "").replace(/\]/g, "");
 
 		feed.addItem({
 			title: writing.title,
