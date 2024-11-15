@@ -303,7 +303,13 @@ const projects = [
 	},
 	{
 		id: 6,
+		title: "Sotsial",
+		description: "API-first content publishing.",
+		link: "https://sotsial.com",
+	},
+	/*{
+		id: 7,
 		title: "Rosel",
 		description: "A helpful voice assistant for the web.",
-	},
+	},*/
 ];
