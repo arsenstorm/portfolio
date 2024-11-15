@@ -38,7 +38,7 @@ function WritingItem({
 
 			<span className="flex-grow mx-4 border-dotted border-t border-zinc-200 dark:border-zinc-900" />
 
-			<Text>
+			<Text className="font-mono">
 				<time dateTime={date}>{formatDate(date)}</time>
 			</Text>
 		</div>

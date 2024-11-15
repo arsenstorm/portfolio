@@ -81,7 +81,7 @@ export default function Portfolio({
 					indexCount++;
 
 					return (
-						<Card
+						<li
 							key={project.id}
 							style={
 								{
@@ -89,25 +89,27 @@ export default function Portfolio({
 								} as React.CSSProperties
 							}
 						>
-							{project.link ? (
-								<Text className="inline-flex items-center">
-									<TextLink
-										href={project.link}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="underline"
-									>
-										{project.title}
-									</TextLink>
-									<OpenInNewTab className="size-4 ml-1" />
-								</Text>
-							) : (
-								<Text>
-									<Strong>{project.title}</Strong>
-								</Text>
-							)}
-							<Text>{project.description}</Text>
-						</Card>
+							<Card>
+								{project.link ? (
+									<Text className="inline-flex items-center">
+										<TextLink
+											href={project.link}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="underline"
+										>
+											{project.title}
+										</TextLink>
+										<OpenInNewTab className="size-4 ml-1" />
+									</Text>
+								) : (
+									<Text>
+										<Strong>{project.title}</Strong>
+									</Text>
+								)}
+								<Text>{project.description}</Text>
+							</Card>
+						</li>
 					);
 				})}
 			</ul>
