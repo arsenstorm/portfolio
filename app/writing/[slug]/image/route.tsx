@@ -284,7 +284,7 @@ export async function GET(
 			width: Number(width),
 			height: Number(height),
 			headers: {
-				"Cache-Control": "public, max-age=3600, immutable",
+				"Cache-Control": "public, max-age=86400, immutable",
 			},
 			fonts: Object.entries(await getAllFonts()).map(([fontFamily, font]) => ({
 				name: fontFamily,
