@@ -7,53 +7,27 @@ import path from "node:path";
 import fs from "node:fs/promises";
 
 const getWriting = async (slug: string) => {
-	const filePath = path.resolve(
-		path.join(process.cwd(), "writings", `${slug}.mdx`),
+	return await fs.readFile(
+		path.resolve(path.join(process.cwd(), "writings", `${slug}.mdx`)),
+		"utf8",
 	);
-
-	const file = await fs.readFile(filePath, "utf8");
-
-	return file;
 };
 
-const getInterMedium = async () => {
-	const filePath = path.resolve(
-		path.join(process.cwd(), "fonts", "Inter-Medium.ttf"),
-	);
-
-	const buffer = await fs.readFile(filePath);
-
-	return buffer;
-};
-
-const getInterLight = async () => {
-	const filePath = path.resolve(
-		path.join(process.cwd(), "fonts", "Inter-Light.otf"),
-	);
-
-	const buffer = await fs.readFile(filePath);
-
-	return buffer;
-};
-
-const getInterItalics = async () => {
-	const filePath = path.resolve(
-		path.join(process.cwd(), "fonts", "Inter-Italic.otf"),
-	);
-
-	const buffer = await fs.readFile(filePath);
-
-	return buffer;
-};
-
-const getInterMediumItalics = async () => {
-	const filePath = path.resolve(
-		path.join(process.cwd(), "fonts", "Inter-MediumItalic.otf"),
-	);
-
-	const buffer = await fs.readFile(filePath);
-
-	return buffer;
+const getAllFonts = async () => {
+	return {
+		"Inter Medium": await fs.readFile(
+			path.resolve(path.join(process.cwd(), "fonts", "Inter-Medium.ttf")),
+		),
+		"Inter Light": await fs.readFile(
+			path.resolve(path.join(process.cwd(), "fonts", "Inter-Light.otf")),
+		),
+		"Inter Italics": await fs.readFile(
+			path.resolve(path.join(process.cwd(), "fonts", "Inter-Italic.otf")),
+		),
+		"Inter Medium Italics": await fs.readFile(
+			path.resolve(path.join(process.cwd(), "fonts", "Inter-MediumItalic.otf")),
+		),
+	};
 };
 
 function mulberry32(a: number) {
@@ -76,7 +50,19 @@ function hashCode(str: string) {
 	return hash;
 }
 
-// Extract word rendering logic into separate function
+function getTextStyle(isItalic: boolean, isBold: boolean) {
+	if (isBold) {
+		return {
+			fontFamily: isItalic ? "Inter Medium Italics" : "Inter Medium",
+			color: "#ffffff",
+		};
+	}
+	return {
+		fontStyle: isItalic ? "italic" : "normal",
+		fontFamily: isItalic ? "Inter Italics" : "Inter Light",
+	};
+}
+
 function renderWord(
 	word: string,
 	lineIndex: number,
@@ -85,128 +71,68 @@ function renderWord(
 	isItalic: boolean,
 	isBold: boolean,
 ) {
-	const parts = [word];
+	const hasItalic = word.endsWith("”");
+	const hasBold = word.endsWith("{{/bold}}");
+	const text = word
+		.replace(/\{\{bold\}\}/, "")
+		.replace(/\{\{\/bold\}\}/, "")
+		.replace("”", "");
+
+	if (isBold || hasBold || isItalic || hasItalic) {
+		return (
+			<span key={`word-${lineIndex}-${wordIndex}-${random() * 1000}`}>
+				<span
+					key={`styled-${lineIndex}-${wordIndex}-${random() * 1000}`}
+					style={getTextStyle(isItalic || hasItalic, isBold || hasBold)}
+				>
+					{text}
+				</span>
+				{hasItalic && (
+					<span
+						key={`quote-${lineIndex}-${wordIndex}-${random() * 1000}`}
+						style={{
+							fontStyle: "italic",
+							fontFamily: "Inter Italics",
+						}}
+					>
+						”
+					</span>
+				)}
+			</span>
+		);
+	}
 
 	return (
 		<span key={`word-${lineIndex}-${wordIndex}-${random() * 1000}`}>
-			{parts.map((part, partIndex) => {
-				if (isBold && (isItalic || part.endsWith("”"))) {
-					const text = part
-						.replace(/\{\{bold\}\}/, "")
-						.replace(/\{\{\/bold\}\}/, "");
-
-					return renderBoldInItalic(
-						text,
-						lineIndex,
-						wordIndex,
-						partIndex,
-						random,
-						true,
-					);
-				}
-				if (isBold || part.endsWith("{{/bold}}")) {
-					const text = part
-						.replace(/\{\{bold\}\}/, "")
-						.replace(/\{\{\/bold\}\}/, "");
-
-					return (
-						<span
-							key={`bold-${lineIndex}-${wordIndex}-${partIndex}-${random() * 1000}`}
-							style={{
-								fontFamily: "Inter Medium",
-								color: "#ffffff",
-							}}
-						>
-							{text}
-						</span>
-					);
-				}
-				if (isItalic || part.endsWith("”")) {
-					return renderItalicPart(
-						part,
-						lineIndex,
-						wordIndex,
-						partIndex,
-						random,
-					);
-				}
-				return (
-					<span
-						key={`text-${lineIndex}-${wordIndex}-${partIndex}-${random() * 1000}`}
-						style={{
-							fontFamily: "Inter Light",
-						}}
-					>
-						{part}
-					</span>
-				);
-			})}
+			<span
+				style={{
+					fontFamily: "Inter Light",
+				}}
+			>
+				{text}
+			</span>
 		</span>
 	);
 }
 
-function renderItalicPart(
-	part: string,
-	lineIndex: number,
-	wordIndex: number,
-	partIndex: number,
-	random: () => number,
-) {
+function BackgroundDecorations({ random }: Readonly<{ random: () => number }>) {
 	return (
-		<span
-			key={`italic-${lineIndex}-${wordIndex}-${partIndex}-${random() * 1000}`}
-			style={{
-				fontStyle: "italic",
-				fontFamily: "Inter Italics",
-			}}
-		>
-			{renderBoldInItalic(part, lineIndex, wordIndex, partIndex, random, false)}
-		</span>
+		<>
+			{[...Array(20)].map((_, i) => (
+				<div
+					key={`decoration-${i}-${random() * 1000}`}
+					style={{
+						position: "absolute",
+						width: `${random() * 100 + 50}px`,
+						height: `${random() * 100 + 50}px`,
+						border: "1px solid #ffffff75",
+						transform: `rotate(${random() * 360}deg) translate(${random() * 1000 - 500}px, ${random() * 600 - 300}px)`,
+						opacity: 0.25,
+					}}
+				/>
+			))}
+		</>
 	);
-}
-
-function renderBoldInItalic(
-	text: string,
-	lineIndex: number,
-	wordIndex: number,
-	partIndex: number,
-	random: () => number,
-	isBold: boolean,
-) {
-	return text.split(/(\{\{bold\}\}.*?\{\{\/bold\}\})/g).map((part, index) => {
-		if (isBold) {
-			// if the part endswith ”, we need to remove it and return it sepearetly
-			const hasItalic = part.endsWith("”");
-
-			const text = hasItalic ? part.replace("”", "") : part;
-
-			return (
-				<>
-					<span
-						key={`bold-${lineIndex}-${wordIndex}-${partIndex}-${index}-${random() * 1000}`}
-						style={{
-							fontFamily: "Inter Medium Italics",
-							color: "#ffffff",
-						}}
-					>
-						{text}
-					</span>
-					{hasItalic && (
-						<span
-							key={`italic-${lineIndex}-${wordIndex}-${partIndex}-${index}-${random() * 1000}`}
-							style={{
-								fontStyle: "italic",
-								fontFamily: "Inter Italics",
-							}}
-						>
-							”
-						</span>
-					)}
-				</>
-			);
-		}
-		return part;
-	});
 }
 
 /**
@@ -246,10 +172,12 @@ export async function GET(
 
 		writing = parts[2].trim();
 
-		writing = writing.replaceAll(">\n", "> \n").replace(
-			/(^>(?:[^\n]+)(?:\n>(?:[^\n]+))*)/gm,
-			(match) => `“${match.replace(/^> ?/gm, "").trim()}”`,
-		);
+		writing = writing
+			.replaceAll(">\n", "> \n")
+			.replace(
+				/(^>(?:[^\n]+)(?:\n>(?:[^\n]+))*)/gm,
+				(match) => `“${match.replace(/^> ?/gm, "").trim()}”`,
+			);
 
 		writing = writing.replace(/\[(.*?)\]\([^)]+\)/g, "{{bold}}$1{{/bold}}");
 		writing = writing.replace(/\*\*([\s\S]*?)\*\*/g, "{{bold}}$1{{/bold}}");
@@ -284,19 +212,7 @@ export async function GET(
 				padding: "128px",
 			}}
 		>
-			{[...Array(20)].map((_, i) => (
-				<div
-					key={`decoration-${i}-${random() * 1000}`}
-					style={{
-						position: "absolute",
-						width: `${random() * 100 + 50}px`,
-						height: `${random() * 100 + 50}px`,
-						border: "1px solid #ffffff75",
-						transform: `rotate(${random() * 360}deg) translate(${random() * 1000 - 500}px, ${random() * 600 - 300}px)`,
-						opacity: 0.25,
-					}}
-				/>
-			))}
+			<BackgroundDecorations random={random} />
 			<div
 				style={{
 					backgroundImage: "linear-gradient(to bottom, #ffffff, #64748b)",
@@ -370,24 +286,10 @@ export async function GET(
 			headers: {
 				"Cache-Control": "public, max-age=3600, immutable",
 			},
-			fonts: [
-				{
-					name: "Inter Light",
-					data: await getInterLight(),
-				},
-				{
-					name: "Inter Medium",
-					data: await getInterMedium(),
-				},
-				{
-					name: "Inter Italics",
-					data: await getInterItalics(),
-				},
-				{
-					name: "Inter Medium Italics",
-					data: await getInterMediumItalics(),
-				},
-			],
+			fonts: Object.entries(await getAllFonts()).map(([fontFamily, font]) => ({
+				name: fontFamily,
+				data: font,
+			})),
 		},
 	);
 }
