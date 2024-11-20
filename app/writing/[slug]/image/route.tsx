@@ -210,13 +210,19 @@ function renderBoldInItalic(
 }
 
 /**
- * @name OG Template
+ * @name Writing Image Template
  */
 export async function GET(
-	_: NextRequest,
-	{ params }: Readonly<{ params: Promise<{ slug: string }> }>,
+	request: NextRequest,
+	{
+		params,
+	}: Readonly<{
+		params: Promise<{ slug: string }>;
+	}>,
 ) {
 	const { slug } = await params;
+	const width = request.nextUrl.searchParams.get("width") ?? 1024;
+	const height = request.nextUrl.searchParams.get("height") ?? 1024;
 
 	let title: string | null = null;
 	let writing: string | null = null;
@@ -240,7 +246,7 @@ export async function GET(
 
 		writing = parts[2].trim();
 
-		writing = writing.replace(
+		writing = writing.replaceAll(">\n", "> \n").replace(
 			/(^>(?:[^\n]+)(?:\n>(?:[^\n]+))*)/gm,
 			(match) => `“${match.replace(/^> ?/gm, "").trim()}”`,
 		);
@@ -359,8 +365,8 @@ export async function GET(
 			</div>
 		</div>,
 		{
-			width: 1024,
-			height: 1024,
+			width: Number(width),
+			height: Number(height),
 			headers: {
 				"Cache-Control": "public, max-age=3600, immutable",
 			},
