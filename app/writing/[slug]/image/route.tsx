@@ -50,11 +50,15 @@ function hashCode(str: string) {
 	return hash;
 }
 
-function getTextStyle(isItalic: boolean, isBold: boolean) {
+function getTextStyle(
+	isItalic: boolean,
+	isBold: boolean,
+	theme: "dark" | "light",
+) {
 	if (isBold) {
 		return {
 			fontFamily: isItalic ? "Inter Medium Italics" : "Inter Medium",
-			color: "#ffffff",
+			color: theme === "dark" ? "#ffffff" : "#000",
 		};
 	}
 	return {
@@ -70,6 +74,7 @@ function renderWord(
 	random: () => number,
 	isItalic: boolean,
 	isBold: boolean,
+	theme: "dark" | "light",
 ) {
 	const hasItalic = word.endsWith("”");
 	const hasBold = word.endsWith("{{/bold}}");
@@ -83,7 +88,7 @@ function renderWord(
 			<span key={`word-${lineIndex}-${wordIndex}-${random() * 1000}`}>
 				<span
 					key={`styled-${lineIndex}-${wordIndex}-${random() * 1000}`}
-					style={getTextStyle(isItalic || hasItalic, isBold || hasBold)}
+					style={getTextStyle(isItalic || hasItalic, isBold || hasBold, theme)}
 				>
 					{text}
 				</span>
@@ -115,7 +120,10 @@ function renderWord(
 	);
 }
 
-function BackgroundDecorations({ random }: Readonly<{ random: () => number }>) {
+function BackgroundDecorations({
+	random,
+	theme,
+}: Readonly<{ random: () => number; theme: "dark" | "light" }>) {
 	return (
 		<>
 			{[...Array(20)].map((_, i) => (
@@ -125,7 +133,7 @@ function BackgroundDecorations({ random }: Readonly<{ random: () => number }>) {
 						position: "absolute",
 						width: `${random() * 100 + 50}px`,
 						height: `${random() * 100 + 50}px`,
-						border: "1px solid #ffffff75",
+						border: `1px solid ${theme === "dark" ? "#ffffff75" : "#00000075"}`,
 						transform: `rotate(${random() * 360}deg) translate(${random() * 1000 - 500}px, ${random() * 600 - 300}px)`,
 						opacity: 0.25,
 					}}
@@ -149,6 +157,8 @@ export async function GET(
 	const { slug } = await params;
 	const width = request.nextUrl.searchParams.get("width") ?? 1024;
 	const height = request.nextUrl.searchParams.get("height") ?? 1024;
+	const theme: "dark" | "light" =
+		(request.nextUrl.searchParams.get("theme") as "dark" | "light") ?? "dark";
 
 	let title: string | null = null;
 	let writing: string | null = null;
@@ -195,11 +205,7 @@ export async function GET(
 	return new ImageResponse(
 		<div
 			style={{
-				backgroundColor: "#000",
-				backgroundImage: `radial-gradient(circle at 0% 0%, #ffffff05 0%, transparent 50%),
-				                 radial-gradient(circle at 100% 0%, #ffffff05 0%, transparent 50%),
-				                 radial-gradient(circle at 100% 100%, #ffffff05 0%, transparent 50%),
-				                 radial-gradient(circle at 0% 100%, #ffffff05 0%, transparent 50%)`,
+				backgroundColor: theme === "dark" ? "#000" : "#fff",
 				position: "relative",
 				display: "flex",
 				flexDirection: "column",
@@ -212,10 +218,10 @@ export async function GET(
 				padding: "128px",
 			}}
 		>
-			<BackgroundDecorations random={random} />
+			<BackgroundDecorations random={random} theme={theme} />
 			<div
 				style={{
-					backgroundImage: "linear-gradient(to bottom, #ffffff, #64748b)",
+					backgroundImage: `linear-gradient(to bottom, ${theme === "dark" ? "#ffffff" : "#000000"}, #64748b)`,
 					WebkitBackgroundClip: "text",
 					color: "transparent",
 					backgroundClip: "text",
@@ -227,7 +233,7 @@ export async function GET(
 				<h1
 					style={{
 						fontFamily: "Inter Medium",
-						color: "#ffffff",
+						color: theme === "dark" ? "#ffffff" : "#000",
 						fontSize: "64px",
 					}}
 				>
@@ -272,6 +278,7 @@ export async function GET(
 									random,
 									isItalic,
 									isBold,
+									theme,
 								);
 							})}
 							{lineIndex < writing.split("\n").length - 1 && "\n"}
