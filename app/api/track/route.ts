@@ -17,6 +17,24 @@ export interface VisitorLog {
 	longitude: number;
 }
 
+async function determineVisitorLocation(
+	headers: Headers,
+	regionNames: Intl.DisplayNames,
+	defaultUnknown: string,
+) {
+	const countryCode = headers.get("x-vercel-ip-country") ?? "";
+	const city = headers.get("x-vercel-ip-city") ?? "";
+	const countryName = regionNames.of(countryCode);
+
+	if (city && countryCode) {
+		return `${city}, ${countryName}`;
+	}
+	if (!city && countryCode) {
+		return `Somewhere in ${["GB", "US", "AE"].includes(countryCode) ? "the " : ""}${countryName}`;
+	}
+	return defaultUnknown;
+}
+
 export async function GET(req: NextRequest) {
 	const ip = ipAddress(req) ?? "";
 	const _headers = await headers();
@@ -30,23 +48,13 @@ export async function GET(req: NextRequest) {
 		});
 	}
 
-	let setLastVisitor = "";
-	let lastVisitor = "";
+	const setLastVisitor = await determineVisitorLocation(
+		_headers,
+		regionNames,
+		defaultUnknown,
+	);
+	const lastVisitor = (await kv.get("last-visitor")) ?? defaultUnknown;
 	let visitors: VisitorLog[] = [];
-
-	const countryCode = _headers.get("x-vercel-ip-country") ?? "";
-	const city = _headers.get("x-vercel-ip-city") ?? "";
-	const countryName = regionNames.of(countryCode);
-
-	if (city && countryCode) {
-		setLastVisitor = `${city}, ${countryName}`;
-	} else if (!city && countryCode) {
-		setLastVisitor = `Somewhere in ${["GB", "US", "AE"].includes(countryCode) ? "the " : ""}${countryName}`;
-	} else {
-		setLastVisitor = defaultUnknown;
-	}
-
-	lastVisitor = (await kv.get("last-visitor")) ?? defaultUnknown;
 
 	await kv.set("last-visitor", setLastVisitor);
 
@@ -69,7 +77,7 @@ export async function GET(req: NextRequest) {
 			};
 
 			visitors.unshift(newVisitor);
-			if (visitors.length > 100) visitors.length = 100;
+			if (visitors.length > 500) visitors.length = 500;
 
 			await kv.set("visitors", visitors);
 		}
@@ -93,6 +101,5 @@ export async function GET(req: NextRequest) {
 async function getIpLocation(ip: string) {
 	const response = await fetch(`http://ip-api.com/json/${ip}`);
 	const data = await response.json();
-	console.log(data);
 	return { latitude: data.lat, longitude: data.lon };
 }
