@@ -9,11 +9,15 @@ import createGlobe from "cobe";
 // Escape
 import { EscapeTitle } from "@/components/design/escape";
 
+// Hooks
+import { useTheme } from "next-themes";
+
 // Types
 import type { VisitorLog } from "@/app/api/track/route";
 
 export default function GlobePage() {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
+	const { resolvedTheme } = useTheme();
 	const [visitors, setVisitors] = useState<VisitorLog[]>([]);
 
 	useEffect(() => {
@@ -30,7 +34,6 @@ export default function GlobePage() {
 		let phi = 0;
 
 		if (!canvasRef.current) return;
-		if (!visitors) return;
 
 		const globe = createGlobe(canvasRef.current, {
 			devicePixelRatio: 2,
@@ -38,17 +41,20 @@ export default function GlobePage() {
 			height: 600 * 2,
 			phi: 0,
 			theta: 0,
-			dark: 1,
+			dark: resolvedTheme === "dark" ? 1 : 0,
 			diffuse: 1.2,
 			mapSamples: 16000,
-			mapBrightness: 6,
-			baseColor: [0.3, 0.3, 0.3],
-			markerColor: [0.1, 0.8, 1],
+			mapBrightness: resolvedTheme === "dark" ? 6 : 10,
+			baseColor: resolvedTheme === "dark" ? [0.3, 0.3, 0.3] : [0.9, 0.9, 0.9],
+			markerColor: [1, 0.5, 0],
 			glowColor: [1, 1, 1],
-			markers: visitors?.map((visitor) => ({
-				location: [visitor.longitude, visitor.latitude],
-				size: 0.05,
-			})),
+			markers:
+				visitors?.length > 0
+					? visitors.map((visitor) => ({
+							location: [visitor.longitude, visitor.latitude],
+							size: 0.05,
+						}))
+					: [],
 			onRender: (state) => {
 				// Called on every animation frame.
 				// `state` will be an empty object, return updated params.
@@ -60,15 +66,23 @@ export default function GlobePage() {
 		return () => {
 			globe.destroy();
 		};
-	}, [visitors]);
+	}, [visitors, resolvedTheme]);
 
 	return (
-		<div>
+		<div className="orchestration">
 			<EscapeTitle title="The Globe." />
-			<pre>{JSON.stringify(visitors, null, 2)}</pre>
 			<canvas
 				ref={canvasRef}
-				style={{ width: 600, height: 600, maxWidth: "100%", aspectRatio: 1 }}
+				style={
+					{
+						width: 600,
+						height: 600,
+						maxWidth: "100%",
+						aspectRatio: 1,
+
+						"--stagger-index": 2,
+					} as React.CSSProperties
+				}
 			/>
 		</div>
 	);

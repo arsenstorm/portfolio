@@ -91,8 +91,8 @@ export async function GET(req: NextRequest) {
 }
 
 async function getIpLocation(ip: string) {
-	const response = await fetch(`https://ipapi.co/${ip}/json/`);
+	const response = await fetch(`http://ip-api.com/json/${ip}`);
 	const data = await response.json();
 	console.log(data);
-	return { latitude: data.latitude, longitude: data.longitude };
+	return { latitude: data.lat, longitude: data.lon };
 }
