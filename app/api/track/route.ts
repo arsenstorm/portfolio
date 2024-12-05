@@ -51,6 +51,7 @@ export async function GET(req: NextRequest) {
 	await kv.set("last-visitor", setLastVisitor);
 
 	if (ip !== "") {
+		console.warn("IP is not empty", ip);
 		// Set last visitor
 		await kv.set("last-visitor", setLastVisitor);
 
