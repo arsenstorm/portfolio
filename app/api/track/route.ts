@@ -60,17 +60,19 @@ export async function GET(req: NextRequest) {
 
 		const { latitude, longitude } = await getIpLocation(ip);
 
-		const newVisitor: VisitorLog = {
-			location: setLastVisitor,
-			timestamp: new Date().toISOString(),
-			latitude,
-			longitude,
-		};
+		if (latitude && longitude) {
+			const newVisitor: VisitorLog = {
+				location: setLastVisitor,
+				timestamp: new Date().toISOString(),
+				latitude,
+				longitude,
+			};
 
-		visitors.unshift(newVisitor);
-		if (visitors.length > 100) visitors.length = 100;
+			visitors.unshift(newVisitor);
+			if (visitors.length > 100) visitors.length = 100;
 
-		await kv.set("visitors", visitors);
+			await kv.set("visitors", visitors);
+		}
 	}
 
 	return NextResponse.json(
