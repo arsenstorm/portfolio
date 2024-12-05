@@ -5,6 +5,13 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
+export interface VisitorLog {
+	location: string;
+	timestamp: string;
+	latitude: number;
+	longitude: number;
+}
+
 export async function GET(req: NextRequest) {
 	const ip = ipAddress(req) ?? "";
 	const _headers = await headers();
@@ -20,6 +27,7 @@ export async function GET(req: NextRequest) {
 
 	let setLastVisitor = "";
 	let lastVisitor = "";
+	let visitors: VisitorLog[] = [];
 
 	const countryCode = _headers.get("x-vercel-ip-country") ?? "";
 	const city = _headers.get("x-vercel-ip-city") ?? "";
@@ -38,12 +46,30 @@ export async function GET(req: NextRequest) {
 	await kv.set("last-visitor", setLastVisitor);
 
 	if (ip !== "") {
-		console.warn("ip: ", ip, "last-visitor: ", setLastVisitor);
+		// Set last visitor
 		await kv.set("last-visitor", setLastVisitor);
+
+		// get the latitude and longitude by ip address
+		visitors = ((await kv.get("visitors")) as VisitorLog[]) ?? [];
+
+		const { latitude, longitude } = await getIpLocation(ip);
+
+		const newVisitor: VisitorLog = {
+			location: setLastVisitor,
+			timestamp: new Date().toISOString(),
+			latitude,
+			longitude,
+		};
+
+		visitors.unshift(newVisitor);
+		if (visitors.length > 100) visitors.length = 100;
+
+		await kv.set("visitors", visitors);
 	}
 
 	return NextResponse.json(
 		{
+			visitors,
 			lastVisitor:
 				typeof lastVisitor === "string"
 					? decodeURIComponent(lastVisitor)
@@ -54,4 +80,11 @@ export async function GET(req: NextRequest) {
 			status: 200,
 		},
 	);
+}
+
+async function getIpLocation(ip: string) {
+	const response = await fetch(`https://ipapi.co/${ip}/json/`);
+	const data = await response.json();
+	console.log(data);
+	return { latitude: data.latitude, longitude: data.longitude };
 }
