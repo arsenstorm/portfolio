@@ -5,6 +5,11 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
+/**
+ * Visitor log storing non-identifiable location data
+ * Only stores general location (city/country), timestamp, and approximate coordinates
+ * No personal data or precise location information is retained
+ */
 export interface VisitorLog {
 	location: string;
 	timestamp: string;

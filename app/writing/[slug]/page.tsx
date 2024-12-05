@@ -80,6 +80,8 @@ export default async function WritingPage({
 	const next = writings?.[index + 1]?.slug;
 	const writing = writings[index];
 
+	const content = await WritingsPage({ slug });
+
 	return (
 		<>
 			<main
@@ -114,7 +116,7 @@ export default async function WritingPage({
 				)}
 			>
 				<EscapeTitle title={writing?.title ?? "Untitled."} />
-				<WritingsPage slug={slug} />
+				{content}
 			</main>
 			<footer className="max-w-2xl mx-auto fixed bottom-0 left-0 right-0 px-4 py-8 flex flex-row justify-between items-center z-20 !animate-none !opacity-100">
 				<Hotkeys previous={previous} next={next} />
