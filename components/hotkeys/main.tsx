@@ -24,6 +24,13 @@ export function Hotkeys() {
 				router.push("/writing");
 			},
 		],
+		// switch user to /globe
+		[
+			"mod+g",
+			() => {
+				router.push("/globe");
+			},
+		],
 	]);
 
 	return null;

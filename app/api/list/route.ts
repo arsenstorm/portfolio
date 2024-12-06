@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
+import { getVisitors } from "@/actions/get-visitors";
 
 export async function GET() {
-	const visitors = await kv.get("visitors");
+	const visitors = await getVisitors();
 
 	return NextResponse.json(visitors ?? []);
 }

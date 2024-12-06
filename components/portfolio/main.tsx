@@ -12,6 +12,7 @@ import OpenInNewTab from "@/icons/open-in-new-tab.svg";
 import { Divider } from "@/components/ui/divider";
 import { WhereIsLastVisitor } from "./where-is-last-visitor";
 import { EmailMe } from "./email-me";
+import { VisitorsGlobe } from "./visitors-globe";
 
 // Functions
 import { getCommandKey } from "@/utils/get-command-key";
@@ -150,10 +151,17 @@ export default function Portfolio({
 					} as React.CSSProperties
 				}
 			/>
-			<EmailMe
+			<VisitorsGlobe
 				style={
 					{
 						"--stagger-index": indexCount + 5,
+					} as React.CSSProperties
+				}
+			/>
+			<EmailMe
+				style={
+					{
+						"--stagger-index": indexCount + 6,
 					} as React.CSSProperties
 				}
 			/>
@@ -161,7 +169,7 @@ export default function Portfolio({
 				className="my-4"
 				style={
 					{
-						"--stagger-index": indexCount + 6,
+						"--stagger-index": indexCount + 7,
 					} as React.CSSProperties
 				}
 			/>
@@ -169,7 +177,7 @@ export default function Portfolio({
 				level={2}
 				style={
 					{
-						"--stagger-index": indexCount + 7,
+						"--stagger-index": indexCount + 8,
 					} as React.CSSProperties
 				}
 			>
@@ -178,7 +186,7 @@ export default function Portfolio({
 			<Text
 				style={
 					{
-						"--stagger-index": indexCount + 8,
+						"--stagger-index": indexCount + 9,
 					} as React.CSSProperties
 				}
 			>
@@ -196,7 +204,7 @@ export default function Portfolio({
 				className="my-4"
 				style={
 					{
-						"--stagger-index": indexCount + 9,
+						"--stagger-index": indexCount + 10,
 					} as React.CSSProperties
 				}
 			/>
@@ -204,7 +212,7 @@ export default function Portfolio({
 				level={2}
 				style={
 					{
-						"--stagger-index": indexCount + 10,
+						"--stagger-index": indexCount + 11,
 					} as React.CSSProperties
 				}
 			>
@@ -213,7 +221,7 @@ export default function Portfolio({
 			<Text
 				style={
 					{
-						"--stagger-index": indexCount + 11,
+						"--stagger-index": indexCount + 12,
 					} as React.CSSProperties
 				}
 			>
