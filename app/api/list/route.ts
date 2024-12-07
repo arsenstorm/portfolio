@@ -6,7 +6,7 @@ export async function GET() {
 
 	return NextResponse.json(visitors ?? [], {
 		headers: {
-			"Cache-Control": "no-store",
+			"Cache-Control": "public, max-age=1800, stale-while-revalidate=3600",
 		},
 	});
 }
