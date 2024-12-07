@@ -5,7 +5,7 @@ import { getVisitors } from "@/actions/get-visitors";
 import Globe from "./page.client";
 
 export default async function GlobePage() {
-	const visitors = await getVisitors();
+	const { visitors, lastUpdated } = await getVisitors();
 
-	return <Globe visitors={visitors} />;
+	return <Globe visitors={visitors} lastUpdated={lastUpdated} />;
 }

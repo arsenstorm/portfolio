@@ -7,19 +7,26 @@ import { useEffect, useRef } from "react";
 import createGlobe from "cobe";
 import { useSpring } from "react-spring";
 
-// Escape
+// Design
 import { EscapeTitle } from "@/components/design/escape";
+import { Text } from "@/components/ui/text";
 
 // Hooks
 import { useTheme } from "next-themes";
 
 // Types
 import type { VisitorLog } from "@/app/api/track/route";
-import { Text } from "@/components/ui/text";
+
+// Time
+import { formatDistanceToNow } from "date-fns";
 
 export default function Globe({
 	visitors,
-}: { readonly visitors: VisitorLog[] }) {
+	lastUpdated,
+}: {
+	readonly visitors: VisitorLog[];
+	readonly lastUpdated: number;
+}) {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const pointerInteracting = useRef<number | null>(null);
 	const pointerInteractionMovement = useRef(0);
@@ -147,6 +154,12 @@ export default function Globe({
 				}
 			>
 				A globe of visitors from around the world.
+			</Text>
+			<Text
+				className="text-center !opacity-50 !text-xs"
+				style={{ "--stagger-index": 4 } as React.CSSProperties}
+			>
+				Last updated {formatDistanceToNow(lastUpdated, { addSuffix: true })}
 			</Text>
 		</div>
 	);

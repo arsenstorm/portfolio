@@ -3,7 +3,10 @@ import { kv } from "@vercel/kv";
 
 export const dynamic = "force-dynamic";
 
-export async function getVisitors(): Promise<VisitorLog[]> {
+export async function getVisitors(): Promise<{
+	visitors: VisitorLog[];
+	lastUpdated: number;
+}> {
 	const visitors = (await kv.get("visitors")) as VisitorLog[];
-	return visitors ?? [];
+	return { visitors: visitors ?? [], lastUpdated: Date.now() };
 }
