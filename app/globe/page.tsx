@@ -1,6 +1,3 @@
-// Actions
-import { getVisitors } from "@/actions/get-visitors";
-
 // Components
 import Globe from "./page.client";
 
@@ -14,7 +11,9 @@ import { formatDistanceToNow } from "date-fns";
 export const revalidate = 3600;
 
 export default async function GlobePage() {
-	const { visitors, lastUpdated } = await getVisitors();
+	const { visitors, lastUpdated } = await fetch(
+		new URL(`${process.env.VERCEL_URL ?? "http://localhost:3000"}/api/list`),
+	).then((res) => res.json());
 
 	return (
 		<div className="orchestration">
