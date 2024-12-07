@@ -11,8 +11,11 @@ import { formatDistanceToNow } from "date-fns";
 export const revalidate = 3600;
 
 export default async function GlobePage() {
+	const url = process.env.VERCEL_URL
+		? `https://${process.env.VERCEL_URL}`
+		: "http://localhost:3000";
 	const { visitors, lastUpdated } = await fetch(
-		new URL(`${process.env.VERCEL_URL ?? "http://localhost:3000"}/api/list`),
+		new URL(`${url}/api/list`),
 	).then((res) => res.json());
 
 	return (
