@@ -7,18 +7,11 @@ import { useEffect, useRef } from "react";
 import createGlobe from "cobe";
 import { useSpring } from "react-spring";
 
-// Design
-import { EscapeTitle } from "@/components/design/escape";
-import { Text } from "@/components/ui/text";
-
 // Hooks
 import { useTheme } from "next-themes";
 
 // Types
 import type { VisitorLog } from "@/app/api/track/route";
-
-// Time
-import { formatDistanceToNow } from "date-fns";
 
 export default function Globe({
 	visitors,
@@ -96,71 +89,52 @@ export default function Globe({
 	}, [visitors, resolvedTheme, r.get]);
 
 	return (
-		<div className="orchestration">
-			<EscapeTitle title="The Globe." />
-			<div className="relative mx-auto aspect-square w-full max-w-[600px]">
-				<canvas
-					ref={canvasRef}
-					onPointerDown={(e) => {
-						pointerInteracting.current =
-							e.clientX - pointerInteractionMovement.current;
-						if (canvasRef.current) canvasRef.current.style.cursor = "grabbing";
-					}}
-					onPointerUp={() => {
-						pointerInteracting.current = null;
-						if (canvasRef.current) canvasRef.current.style.cursor = "grab";
-					}}
-					onPointerOut={() => {
-						pointerInteracting.current = null;
-						if (canvasRef.current) canvasRef.current.style.cursor = "grab";
-					}}
-					onMouseMove={(e) => {
-						if (pointerInteracting.current !== null) {
-							const delta = e.clientX - pointerInteracting.current;
-							pointerInteractionMovement.current = delta;
-							api.start({
-								r: delta / 200,
-							});
-						}
-					}}
-					onTouchMove={(e) => {
-						if (pointerInteracting.current !== null && e.touches[0]) {
-							const delta = e.touches[0].clientX - pointerInteracting.current;
-							pointerInteractionMovement.current = delta;
-							api.start({
-								r: delta / 100,
-							});
-						}
-					}}
-					style={
-						{
-							width: "100%",
-							height: "100%",
-							cursor: "grab",
-							contain: "layout paint size",
-							opacity: 0,
-							transition: "opacity 1s ease",
-							"--stagger-index": 2,
-						} as React.CSSProperties
+		<div className="relative mx-auto aspect-square w-full max-w-[600px]">
+			<canvas
+				ref={canvasRef}
+				onPointerDown={(e) => {
+					pointerInteracting.current =
+						e.clientX - pointerInteractionMovement.current;
+					if (canvasRef.current) canvasRef.current.style.cursor = "grabbing";
+				}}
+				onPointerUp={() => {
+					pointerInteracting.current = null;
+					if (canvasRef.current) canvasRef.current.style.cursor = "grab";
+				}}
+				onPointerOut={() => {
+					pointerInteracting.current = null;
+					if (canvasRef.current) canvasRef.current.style.cursor = "grab";
+				}}
+				onMouseMove={(e) => {
+					if (pointerInteracting.current !== null) {
+						const delta = e.clientX - pointerInteracting.current;
+						pointerInteractionMovement.current = delta;
+						api.start({
+							r: delta / 200,
+						});
 					}
-				/>
-			</div>
-			<Text
-				className="text-center"
+				}}
+				onTouchMove={(e) => {
+					if (pointerInteracting.current !== null && e.touches[0]) {
+						const delta = e.touches[0].clientX - pointerInteracting.current;
+						pointerInteractionMovement.current = delta;
+						api.start({
+							r: delta / 100,
+						});
+					}
+				}}
 				style={
 					{
-						"--stagger-index": 3,
+						width: "100%",
+						height: "100%",
+						cursor: "grab",
+						contain: "layout paint size",
+						opacity: 0,
+						transition: "opacity 1s ease",
+						"--stagger-index": 2,
 					} as React.CSSProperties
 				}
-			>
-				A globe of visitors from around the world.
-			</Text>
-			<Text
-				className="text-center !opacity-50 !text-xs"
-				style={{ "--stagger-index": 4 } as React.CSSProperties}
-			>
-				Last updated {formatDistanceToNow(lastUpdated, { addSuffix: true })}
-			</Text>
+			/>
 		</div>
 	);
 }
