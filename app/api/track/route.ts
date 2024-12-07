@@ -79,10 +79,13 @@ export async function GET(req: NextRequest) {
 			visitors.unshift(newVisitor);
 
 			// remove duplicates by location
-			visitors = visitors.filter(
-				(visitor, index, self) =>
-					index === self.findIndex((t) => t.location === visitor.location),
-			);
+			const uniqueVisitors = new Set();
+			visitors = visitors.filter((visitor) => {
+				const decodedLocation = decodeURIComponent(visitor.location);
+				if (uniqueVisitors.has(decodedLocation)) return false;
+				uniqueVisitors.add(decodedLocation);
+				return true;
+			});
 
 			// limit to 500 visitors
 			if (visitors.length > 500) visitors.length = 500;
