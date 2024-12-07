@@ -41,7 +41,7 @@ export function EscapeProvider({
 }>) {
 	const pathname = usePathname();
 	const router = useTransitionRouter();
-	const [title, setTitle] = useState("Arsen Shkrumelyak");
+	const [title, setTitle] = useState("");
 	const [display, setDisplay] = useState<"show" | "none">("show");
 
 	const returnTo = useMemo(() => {
@@ -59,6 +59,10 @@ export function EscapeProvider({
 		() => ({ title, setTitle, display, setDisplay }),
 		[title, display],
 	);
+
+	useEffect(() => {
+		if (display === "show") setTitle("Arsen Shkrumelyak");
+	}, [display]);
 
 	return (
 		<TitleContext.Provider value={contextValue}>
