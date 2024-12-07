@@ -30,6 +30,8 @@ import clsx from "clsx";
 const TitleContext = createContext<{
 	title: string;
 	setTitle: (title: string) => void;
+	display: "show" | "none";
+	setDisplay: (display: "show" | "none") => void;
 } | null>(null);
 
 export function EscapeProvider({
@@ -40,6 +42,7 @@ export function EscapeProvider({
 	const pathname = usePathname();
 	const router = useTransitionRouter();
 	const [title, setTitle] = useState("Arsen Shkrumelyak");
+	const [display, setDisplay] = useState<"show" | "none">("show");
 
 	const returnTo = useMemo(() => {
 		if (pathname.startsWith("/writing/")) return "/writing";
@@ -52,7 +55,10 @@ export function EscapeProvider({
 
 	useHotkeys([["Escape", handleBack]]);
 
-	const contextValue = useMemo(() => ({ title, setTitle }), [title]);
+	const contextValue = useMemo(
+		() => ({ title, setTitle, display, setDisplay }),
+		[title, display],
+	);
 
 	return (
 		<TitleContext.Provider value={contextValue}>
@@ -76,11 +82,12 @@ export function EscapeProvider({
 									"--stagger-index": 1,
 								} as React.CSSProperties
 							}
+							className={clsx(display === "none" && "hidden")}
 						>
 							{title}
 						</Heading>
 						<Divider
-							className="my-4"
+							className={clsx(display === "none" && "hidden", "my-4")}
 							style={
 								{
 									"--stagger-index": 2,
@@ -115,13 +122,21 @@ export function EscapeProvider({
 	);
 }
 
-export function EscapeTitle({ title }: Readonly<{ title: string }>) {
+export function EscapeTitle({
+	title,
+	display = "show",
+}: Readonly<{
+	title?: string;
+	display?: "show" | "none";
+}> &
+	({ display?: "show"; title: string } | { display: "none"; title?: string })) {
 	const context = useContext(TitleContext);
 
 	useEffect(() => {
 		if (!context) return;
-		context.setTitle(title);
-	}, [title, context]);
+		context.setTitle(title ?? "");
+		context.setDisplay(display ?? "show");
+	}, [title, context, display]);
 
 	return null;
 }

@@ -25,6 +25,9 @@ import { VisitorProvider } from "@/components/cursors/visitor-context";
 // Hotkeys
 import { Hotkeys } from "@/components/hotkeys/main";
 
+// Noise
+import { Noise } from "@/components/ui/frost/noise";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -73,6 +76,11 @@ export default async function RootLayout({
 							</CursorsProvider>
 						</VisitorProvider>
 						<Hotkeys />
+						<Noise
+							blendMode="soft-light"
+							opacity={1}
+							grainSize={1.5}
+						/>
 					</ThemeProvider>
 					<Analytics />
 				</body>

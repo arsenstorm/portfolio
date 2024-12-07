@@ -35,6 +35,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-spring": "^9.7.4",
+    "tailwind-merge": "^2.5.5",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0"
   },
