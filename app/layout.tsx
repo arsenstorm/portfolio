@@ -82,7 +82,7 @@ export default async function RootLayout({
 						blendMode="soft-light"
 						opacity={1}
 						grainSize={1.5}
-						className="fixed"
+						className="fixed z-20"
 					/>
 				</body>
 			</html>
