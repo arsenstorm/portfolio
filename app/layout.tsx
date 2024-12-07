@@ -76,13 +76,14 @@ export default async function RootLayout({
 							</CursorsProvider>
 						</VisitorProvider>
 						<Hotkeys />
-						<Noise
-							blendMode="soft-light"
-							opacity={1}
-							grainSize={1.5}
-						/>
 					</ThemeProvider>
 					<Analytics />
+					<Noise
+						blendMode="soft-light"
+						opacity={1}
+						grainSize={1.5}
+						className="fixed"
+					/>
 				</body>
 			</html>
 		</ViewTransitions>
