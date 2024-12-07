@@ -12,8 +12,8 @@ export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 export default async function GlobePage() {
-	const url = process.env.VERCEL_URL
-		? `https://${process.env.VERCEL_URL}`
+	const url = process.env.VERCEL_PROJECT_PRODUCTION_URL
+		? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
 		: "http://localhost:3000";
 
 	const { visitors = [], lastUpdated = Date.now() - 10000 } = await fetch(
