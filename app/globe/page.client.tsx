@@ -15,6 +15,7 @@ import { useTheme } from "next-themes";
 
 // Types
 import type { VisitorLog } from "@/app/api/track/route";
+import { Text } from "@/components/ui/text";
 
 export default function Globe({
 	visitors,
@@ -137,6 +138,16 @@ export default function Globe({
 					}
 				/>
 			</div>
+			<Text
+				className="text-center"
+				style={
+					{
+						"--stagger-index": 3,
+					} as React.CSSProperties
+				}
+			>
+				A globe of visitors from around the world.
+			</Text>
 		</div>
 	);
 }
