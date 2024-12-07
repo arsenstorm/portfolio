@@ -18,7 +18,7 @@ export default async function GlobePage() {
 
 	const { visitors = [], lastUpdated = Date.now() - 10000 } = await fetch(
 		new URL(`${url}/api/list`),
-		{ cache: "no-cache", next: { revalidate: 3600 } },
+		{ next: { revalidate: 3600 } },
 	).then((res) => res.json());
 
 	return (
