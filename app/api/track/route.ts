@@ -77,6 +77,14 @@ export async function GET(req: NextRequest) {
 			};
 
 			visitors.unshift(newVisitor);
+
+			// remove duplicates by location
+			visitors = visitors.filter(
+				(visitor, index, self) =>
+					index === self.findIndex((t) => t.location === visitor.location),
+			);
+
+			// limit to 500 visitors
 			if (visitors.length > 500) visitors.length = 500;
 
 			await kv.set("visitors", visitors);
