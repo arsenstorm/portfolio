@@ -8,29 +8,18 @@ import { Text } from "@/components/ui/text";
 // Time
 import { formatDistanceToNow } from "date-fns";
 
-// Types
-import type { VisitorLog } from "@/app/api/track/route";
-
 export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function GlobePage() {
 	const url = process.env.VERCEL_URL
 		? `https://${process.env.VERCEL_URL}`
 		: "http://localhost:3000";
 
-	let visitors: VisitorLog[] = [];
-	let lastUpdated = 0;
-
-	try {
-		const data = await fetch(new URL(`${url}/api/list`)).then((res) =>
-			res.json(),
-		);
-		visitors = data.visitors;
-		lastUpdated = data.lastUpdated;
-	} catch {
-		console.warn("Error fetching data");
-		return null;
-	}
+	const { visitors = [], lastUpdated = Date.now() - 10000 } = await fetch(
+		new URL(`${url}/api/list`),
+		{ cache: "no-cache", next: { revalidate: 3600 } },
+	).then((res) => res.json());
 
 	return (
 		<div className="orchestration">
