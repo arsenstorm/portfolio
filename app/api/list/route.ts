@@ -4,5 +4,9 @@ import { getVisitors } from "@/actions/get-visitors";
 export async function GET() {
 	const visitors = await getVisitors();
 
-	return NextResponse.json(visitors ?? []);
+	return NextResponse.json(visitors ?? [], {
+		headers: {
+			"Cache-Control": "no-store",
+		},
+	});
 }
