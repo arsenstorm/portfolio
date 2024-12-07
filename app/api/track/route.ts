@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
 		// get the latitude and longitude by ip address
 		visitors = ((await kv.get("visitors")) as VisitorLog[]) ?? [];
 
-		const { latitude, longitude } = await getIpLocation(ip);
+		const { latitude, longitude } = await getLocation(setLastVisitor);
 
 		if (latitude && longitude) {
 			const newVisitor: VisitorLog = {
@@ -109,8 +109,13 @@ export async function GET(req: NextRequest) {
 	);
 }
 
-async function getIpLocation(ip: string) {
-	const response = await fetch(`http://ip-api.com/json/${ip}`);
+async function getLocation(location: string) {
+	const response = await fetch(
+		`https://api.geoapify.com/v1/geocode/search?text=${location}&apiKey=${process.env.GEOAPIFY_API_KEY}`,
+	);
 	const data = await response.json();
-	return { latitude: data.lat, longitude: data.lon };
+	return {
+		latitude: data.features[0].properties.lat,
+		longitude: data.features[0].properties.lon,
+	};
 }
