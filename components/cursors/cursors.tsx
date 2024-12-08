@@ -20,6 +20,17 @@ import { useIdle } from "@mantine/hooks";
 // Contexts
 import { useVisitor } from "@/components/cursors/visitor-context";
 
+// Mouse
+import {
+	MouseFollower,
+	MouseSmoothing,
+	useMouse,
+} from "@/components/ui/frost/mouse";
+import { motion } from "framer-motion";
+
+// Springs
+import { springs } from "@/utils/springs";
+
 export function CursorsProvider({
 	children,
 }: { readonly children: React.ReactNode }) {
@@ -87,5 +98,24 @@ function CustomCursor({
 				{location}
 			</Badge>
 		</div>
+	);
+}
+
+export function SelfCursor() {
+	const { activeTarget } = useMouse();
+
+	return (
+		<MouseSmoothing
+			position={{ mass: 0.2, damping: 12 }}
+			velocity={{ mass: 0.15, damping: 20 }}
+		>
+			<MouseFollower className="relative h-[200px] w-[200px] !flex !items-center !justify-center rounded-full">
+				<motion.div
+					className="absolute bg-white/90 h-5 w-5 rounded-full"
+					animate={{ scale: activeTarget ? 1 : 0.33 }}
+					transition={springs.slow()}
+				/>
+			</MouseFollower>
+		</MouseSmoothing>
 	);
 }

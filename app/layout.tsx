@@ -28,6 +28,10 @@ import { Hotkeys } from "@/components/hotkeys/main";
 // Noise
 import { Noise } from "@/components/ui/frost/noise";
 
+// Mouse
+import { MouseProvider } from "@/components/ui/frost/mouse";
+import { SelfCursor } from "@/components/cursors/cursors";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -69,12 +73,15 @@ export default async function RootLayout({
 			>
 				<body className={clsx(inter.className, "min-h-screen")}>
 					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-						<VisitorProvider>
-							<CursorsProvider>
-								<EscapeProvider>{children}</EscapeProvider>
-							</CursorsProvider>
-						</VisitorProvider>
-						<Hotkeys />
+						<MouseProvider>
+							<VisitorProvider>
+								<CursorsProvider>
+									<SelfCursor />
+									<EscapeProvider>{children}</EscapeProvider>
+								</CursorsProvider>
+							</VisitorProvider>
+							<Hotkeys />
+						</MouseProvider>
 					</ThemeProvider>
 					<Analytics />
 					<Noise

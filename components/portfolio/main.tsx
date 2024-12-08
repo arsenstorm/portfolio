@@ -90,7 +90,7 @@ export default function Portfolio({
 								} as React.CSSProperties
 							}
 						>
-							<Card>
+							<Card className="h-full">
 								{project.link ? (
 									<Text className="inline-flex items-center">
 										<TextLink
@@ -249,9 +249,11 @@ export default function Portfolio({
 
 function Card({
 	children,
+	className,
 	...props
 }: {
 	readonly children: React.ReactNode;
+	readonly className?: string;
 	readonly style?: React.CSSProperties;
 }): JSX.Element {
 	return (
@@ -259,6 +261,7 @@ function Card({
 			className={clsx(
 				"bg-zinc-100 dark:bg-zinc-900 p-4 rounded-lg",
 				"ring-2 ring-zinc-200 dark:ring-zinc-800",
+				className,
 			)}
 			{...props}
 		>

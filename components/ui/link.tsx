@@ -12,6 +12,7 @@ import {
 	Link as ViewTransitionLink,
 	useTransitionRouter,
 } from "next-view-transitions";
+import { MouseTarget } from "./frost/mouse";
 
 export const Link = React.forwardRef(function Link(
 	props: LinkProps & React.ComponentPropsWithoutRef<"a">,
@@ -20,18 +21,20 @@ export const Link = React.forwardRef(function Link(
 	const router = useTransitionRouter();
 
 	return (
-		<HeadlessDataInteractive>
-			<ViewTransitionLink
-				ref={ref}
-				onMouseEnter={(e) => {
-					const href = typeof props.href === "string" ? props.href : null;
-					if (href) {
-						router.prefetch(href);
-					}
-					return props.onMouseEnter?.(e);
-				}}
-				{...props}
-			/>
-		</HeadlessDataInteractive>
+		<MouseTarget data={{ href: props.href }}>
+			<HeadlessDataInteractive>
+				<ViewTransitionLink
+					ref={ref}
+					onMouseEnter={(e) => {
+						const href = typeof props.href === "string" ? props.href : null;
+						if (href) {
+							router.prefetch(href);
+						}
+						return props.onMouseEnter?.(e);
+					}}
+					{...props}
+				/>
+			</HeadlessDataInteractive>
+		</MouseTarget>
 	);
 });
