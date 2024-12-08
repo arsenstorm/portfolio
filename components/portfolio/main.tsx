@@ -15,14 +15,14 @@ import { EmailMe } from "./email-me";
 import { VisitorsGlobe } from "./visitors-globe";
 
 // Functions
-import { getCommandKey } from "@/utils/get-command-key";
+import { useCommandKey } from "@/utils/get-command-key";
 
 export default function Portfolio({
 	lastVisitor,
 }: {
 	readonly lastVisitor?: string;
 }) {
-	const { device } = getCommandKey();
+	const { device } = useCommandKey();
 	let indexCount = 2;
 
 	return (

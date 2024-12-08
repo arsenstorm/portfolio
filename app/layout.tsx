@@ -62,13 +62,12 @@ export default async function RootLayout({
 }>) {
 	return (
 		<ViewTransitions>
-			<html lang="en" suppressHydrationWarning>
-				<body
-					className={clsx(
-						inter.className,
-						"bg-zinc-50 dark:bg-zinc-950 min-h-screen",
-					)}
-				>
+			<html
+				lang="en"
+				suppressHydrationWarning
+				className="bg-zinc-50 dark:bg-zinc-950"
+			>
+				<body className={clsx(inter.className, "min-h-screen")}>
 					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
 						<VisitorProvider>
 							<CursorsProvider>

@@ -1,3 +1,5 @@
+"use client";
+
 // UI
 import clsx from "clsx";
 import { Link } from "@/components/ui/link";
@@ -5,9 +7,12 @@ import { Link } from "@/components/ui/link";
 // Design
 import { EscapeTitle } from "@/components/design/escape";
 import { Satellites } from "@/components/design/satellites";
+import { useCommandKey } from "@/utils/get-command-key";
 
 export default function NotFound() {
 	let indexCount = 2;
+
+	const { device } = useCommandKey();
 
 	return (
 		<main
@@ -15,7 +20,7 @@ export default function NotFound() {
 				// Animations
 				"orchestration",
 				// Base
-				"prose dark:prose-invert text-center",
+				"prose dark:prose-invert text-center max-h-screen",
 				// Headings
 				"prose-h1:text-2xl/8 prose-h1:font-semibold prose-h1:text-zinc-950 prose-h1:sm:text-xl/8 prose-h1:dark:text-white",
 				// Subheadings
@@ -42,7 +47,7 @@ export default function NotFound() {
 			)}
 		>
 			<EscapeTitle display="none" />
-			<Satellites index={indexCount++} />
+			{device === "desktop" && <Satellites index={indexCount++} />}
 			<p style={{ "--stagger-index": indexCount++ } as React.CSSProperties}>
 				So it seems you’re an adventurer.
 			</p>

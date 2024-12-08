@@ -4,12 +4,12 @@
 import { Code, Text, TextLink } from "@/components/ui/text";
 
 // Functions
-import { getCommandKey } from "@/utils/get-command-key";
+import { useCommandKey } from "@/utils/get-command-key";
 
 export function VisitorsGlobe({
 	style,
 }: { readonly style: React.CSSProperties }) {
-	const { key, device } = getCommandKey();
+	const { key, device } = useCommandKey();
 
 	return (
 		<Text style={style}>

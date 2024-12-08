@@ -1,6 +1,6 @@
 import { useOs } from "@mantine/hooks";
 
-export function getCommandKey() {
+export function useCommandKey() {
 	const os = useOs();
 
 	if (os === "undetermined") {
