@@ -8,7 +8,6 @@ import { Text } from "@/components/ui/text";
 // Time
 import { formatDistanceToNow } from "date-fns";
 
-export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 export default async function GlobePage() {
@@ -18,7 +17,7 @@ export default async function GlobePage() {
 
 	const { visitors = [], lastUpdated = Date.now() - 10000 } = await fetch(
 		new URL(`${url}/api/list`),
-		{ next: { revalidate: 3600 } },
+		{ cache: "no-cache" },
 	).then((res) => res.json());
 
 	return (
