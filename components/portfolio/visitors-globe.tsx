@@ -2,6 +2,7 @@
 
 // UI
 import { Code, Text, TextLink } from "@/components/ui/text";
+import { Link } from "@/components/ui/link";
 
 // Functions
 import { useCommandKey } from "@/utils/get-command-key";
@@ -15,7 +16,9 @@ export function VisitorsGlobe({
 		<Text style={style}>
 			See where people are visiting from!{" "}
 			{device === "desktop" ? (
-				<Code>{key} + G</Code>
+				<Link href="/globe">
+					<Code>{key} + G</Code>
+				</Link>
 			) : (
 				<TextLink href="/globe">Here’s a link!</TextLink>
 			)}
