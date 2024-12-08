@@ -15,13 +15,16 @@ import {
 import { MouseTarget } from "./frost/mouse";
 
 export const Link = React.forwardRef(function Link(
-	props: LinkProps & React.ComponentPropsWithoutRef<"a">,
+	props: LinkProps &
+		React.ComponentPropsWithoutRef<"a"> & {
+			mouse?: Record<string, string>;
+		},
 	ref: React.ForwardedRef<HTMLAnchorElement>,
 ) {
 	const router = useTransitionRouter();
 
 	return (
-		<MouseTarget data={{ href: props.href }}>
+		<MouseTarget data={{ href: props.href, ...props.mouse }}>
 			<HeadlessDataInteractive>
 				<ViewTransitionLink
 					ref={ref}

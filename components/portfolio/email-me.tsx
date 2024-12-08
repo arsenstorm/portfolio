@@ -14,7 +14,10 @@ export function EmailMe({ style }: { readonly style: React.CSSProperties }) {
 		<Text style={style}>
 			Want to book a call?{" "}
 			{device === "desktop" ? (
-				<Link href="https://arsen.dev/time">
+				<Link
+					href="https://arsen.dev/time"
+					mouse={{ action: "Book", this: "a call" }}
+				>
 					<Code>{key} + B</Code>
 				</Link>
 			) : (

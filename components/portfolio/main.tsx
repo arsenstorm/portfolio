@@ -2,6 +2,7 @@
 
 // UI
 import clsx from "clsx";
+import { Link } from "@/components/ui/link";
 import { Subheading } from "@/components/ui/heading";
 import { Code, Strong, Text, TextLink } from "@/components/ui/text";
 
@@ -97,6 +98,7 @@ export default function Portfolio({
 											href={project.link}
 											target="_blank"
 											rel="noopener noreferrer"
+											mouse={{ action: "Visit", this: project.title }}
 											className="underline"
 										>
 											{project.title}
@@ -195,7 +197,13 @@ export default function Portfolio({
 				{device === "desktop" ? (
 					<>
 						{" "}
-						or hit <Code>W</Code>
+						or hit{" "}
+						<Link
+							href="/writing"
+							mouse={{ action: "Read", this: "my writings" }}
+						>
+							<Code>W</Code>
+						</Link>
 					</>
 				) : null}
 				.

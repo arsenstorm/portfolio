@@ -71,6 +71,7 @@ export function EscapeProvider({
 					{pathname !== "/" ? (
 						<Link
 							href={returnTo}
+							mouse={{ action: "Go", this: "back home" }}
 							className="orchestration flex flex-row items-center gap-x-2"
 						>
 							<Badge className="!text-xs">Esc</Badge>

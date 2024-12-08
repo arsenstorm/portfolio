@@ -16,7 +16,7 @@ export function VisitorsGlobe({
 		<Text style={style}>
 			See where people are visiting from!{" "}
 			{device === "desktop" ? (
-				<Link href="/globe">
+				<Link href="/globe" mouse={{ action: "See", this: "where" }}>
 					<Code>{key} + G</Code>
 				</Link>
 			) : (

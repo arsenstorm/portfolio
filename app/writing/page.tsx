@@ -22,18 +22,23 @@ export const metadata: Metadata = {
 };
 
 function WritingItem({
-	href,
+	slug,
 	title,
 	date,
 	index,
-}: Readonly<{ href: string; title: string; date: string; index: number }>) {
+}: Readonly<{ slug: string; title: string; date: string; index: number }>) {
 	return (
 		<div
 			style={{ "--stagger-index": index } as React.CSSProperties}
 			className="!my-0 flex items-center"
 		>
 			<Text>
-				<TextLink href={href}>{title}</TextLink>
+				<TextLink
+					href={`/writing/${slug}`}
+					mouse={{ writing: title, writingId: slug }}
+				>
+					{title}
+				</TextLink>
 			</Text>
 
 			<span className="flex-grow mx-4 border-dotted border-t border-zinc-200 dark:border-zinc-900" />
@@ -81,7 +86,7 @@ export default async function WritingPage() {
 				{writings.map((item, index) => (
 					<WritingItem
 						key={item.slug}
-						href={`/writing/${item.slug}`}
+						slug={item.slug}
 						title={item.title}
 						date={item.date}
 						index={index + 5}

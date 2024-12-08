@@ -9,6 +9,7 @@ import clsx from "clsx";
 import CursorPointer from "@/icons/pointer.svg";
 
 // Components
+import { Text, TextLink } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 
 // Colours
@@ -111,10 +112,37 @@ export function SelfCursor() {
 		>
 			<MouseFollower className="relative h-[200px] w-[200px] !flex !items-center !justify-center rounded-full">
 				<motion.div
-					className="absolute bg-white/90 h-5 w-5 rounded-full"
+					className="absolute bg-black/75 dark:bg-white/75 size-5 rounded-full"
 					animate={{ scale: activeTarget ? 1 : 0.33 }}
 					transition={springs.slow()}
 				/>
+				{activeTarget?.data?.writing && (
+					<motion.div
+						className="absolute ml-80"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: activeTarget ? 1 : 0 }}
+						exit={{ opacity: 0 }}
+						transition={springs.xfast()}
+					>
+						<Text className="w-48">
+							Read <TextLink href={"#"}>{activeTarget.data.writing}</TextLink>
+						</Text>
+					</motion.div>
+				)}
+				{activeTarget?.data?.action && (
+					<motion.div
+						className="absolute ml-80"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: activeTarget ? 1 : 0 }}
+						exit={{ opacity: 0 }}
+						transition={springs.xfast()}
+					>
+						<Text className="w-48">
+							{activeTarget?.data?.action}{" "}
+							<TextLink href={"#"}>{activeTarget.data?.this}</TextLink>
+						</Text>
+					</motion.div>
+				)}
 			</MouseFollower>
 		</MouseSmoothing>
 	);
