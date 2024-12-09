@@ -31,6 +31,7 @@ import { motion } from "framer-motion";
 
 // Springs
 import { springs } from "@/utils/springs";
+import { useCommandKey } from "@/utils/get-command-key";
 
 export function CursorsProvider({
 	children,
@@ -104,6 +105,11 @@ function CustomCursor({
 
 export function SelfCursor() {
 	const { activeTarget } = useMouse();
+	const { device } = useCommandKey();
+
+	if (device === "mobile") {
+		return null;
+	}
 
 	return (
 		<MouseSmoothing
