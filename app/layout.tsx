@@ -19,7 +19,7 @@ import { ViewTransitions } from "next-view-transitions";
 import { EscapeProvider } from "@/components/design/escape";
 
 // Cursors
-import { CursorsProvider } from "@/components/cursors/cursors";
+import { CursorsProvider, SelfCursor } from "@/components/cursors/cursors";
 import { VisitorProvider } from "@/components/cursors/visitor-context";
 
 // Hotkeys
@@ -30,7 +30,6 @@ import { Noise } from "@/components/ui/frost/noise";
 
 // Mouse
 import { MouseProvider } from "@/components/ui/frost/mouse";
-import { SelfCursor } from "@/components/cursors/cursors";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -88,7 +87,7 @@ export default async function RootLayout({
 						blendMode="soft-light"
 						opacity={1}
 						grainSize={1.5}
-						className="fixed z-20"
+						className="fixed z-20 hidden md:block pointer-events-none"
 					/>
 				</body>
 			</html>
