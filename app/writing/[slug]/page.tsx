@@ -16,6 +16,14 @@ import { EscapeTitle } from "@/components/design/escape";
 // Hotkeys
 import { Hotkeys } from "@/components/hotkeys/writings";
 
+export async function generateStaticParams() {
+	const writings = await getAllWriting();
+
+	return writings.map((writing) => ({
+		slug: writing.slug,
+	}));
+}
+
 export async function generateMetadata({
 	params,
 }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

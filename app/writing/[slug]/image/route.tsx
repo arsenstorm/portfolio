@@ -5,6 +5,7 @@ import type { NextRequest } from "next/server";
 // Node
 import path from "node:path";
 import fs from "node:fs/promises";
+import { getAllWriting } from "@/utils/get-all-writing";
 
 const getWriting = async (slug: string) => {
 	return await fs.readFile(
@@ -299,4 +300,12 @@ export async function GET(
 			})),
 		},
 	);
+}
+
+export async function generateStaticParams() {
+	const writings = await getAllWriting();
+
+	return writings.map((writing) => ({
+		slug: writing.slug,
+	}));
 }
