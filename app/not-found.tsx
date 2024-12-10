@@ -47,7 +47,12 @@ export default function NotFound() {
 			)}
 		>
 			<EscapeTitle display="none" />
-			{device === "desktop" && <Satellites index={indexCount++} />}
+			<div className="relative min-h-48">
+				<h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 !text-9xl font-bold tracking-tight">
+					404
+				</h1>
+				{device === "desktop" && <Satellites index={indexCount++} />}
+			</div>
 			<p style={{ "--stagger-index": indexCount++ } as React.CSSProperties}>
 				So it seems you’re an adventurer.
 			</p>
