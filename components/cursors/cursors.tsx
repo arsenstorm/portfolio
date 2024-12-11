@@ -27,7 +27,7 @@ import {
 	MouseSmoothing,
 	useMouse,
 } from "@/components/ui/frost/mouse";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Springs
 import { springs } from "@/utils/springs";
@@ -135,20 +135,22 @@ export function SelfCursor() {
 						</Text>
 					</motion.div>
 				)}
-				{activeTarget?.data?.action && (
-					<motion.div
-						className="absolute ml-80"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: activeTarget ? 1 : 0 }}
-						exit={{ opacity: 0 }}
-						transition={springs.xfast()}
-					>
-						<Text className="w-48">
-							{activeTarget?.data?.action}{" "}
-							<TextLink href={"#"}>{activeTarget.data?.this}</TextLink>
-						</Text>
-					</motion.div>
-				)}
+				<AnimatePresence>
+					{activeTarget?.data?.action && (
+						<motion.div
+							className="absolute ml-80"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: activeTarget ? 1 : 0 }}
+							exit={{ opacity: 0 }}
+							transition={springs.xfast()}
+						>
+							<Text className="w-48">
+								{activeTarget?.data?.action}{" "}
+								<TextLink href={"#"}>{activeTarget.data?.this}</TextLink>
+							</Text>
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</MouseFollower>
 		</MouseSmoothing>
 	);
