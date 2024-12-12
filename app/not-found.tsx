@@ -60,13 +60,23 @@ export default function NotFound() {
 				You’ve come to a place that doesn’t exist.
 			</p>
 			<p style={{ "--stagger-index": indexCount++ } as React.CSSProperties}>
-				Perhaps I can entice you to visit <Link href="/globe">the globe</Link>?
+				Perhaps I can entice you to visit{" "}
+				<Link href="/globe" mouse={{ action: "Visit", this: "the globe" }}>
+					the globe
+				</Link>
+				?
 			</p>
 			<p style={{ "--stagger-index": indexCount++ } as React.CSSProperties}>
-				Or perhaps some of <Link href="/writing">my writings</Link>?
+				Or perhaps some of{" "}
+				<Link href="/writing" mouse={{ action: "Read", this: "my writings" }}>
+					my writings
+				</Link>
+				?
 			</p>
 			<p style={{ "--stagger-index": indexCount++ } as React.CSSProperties}>
-				<Link href="/">Go back home.</Link>
+				<Link href="/" mouse={{ action: "Go back", this: "home" }}>
+					Go back home.
+				</Link>
 			</p>
 		</main>
 	);

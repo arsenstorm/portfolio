@@ -25,7 +25,7 @@ import {
 	type SpringOptions,
 } from "framer-motion";
 
-export type Loose<T> = T | (string & {});
+export type Loose<T> = T | string;
 
 const SMOOTHING_SPRING = {
 	mass: 0.01,
@@ -195,7 +195,7 @@ export const MouseTarget = ({
 	...otherProps
 }: MouseTargetProps) => {
 	const fallbackId = useId();
-	const id = targetId || fallbackId;
+	const id = targetId ?? fallbackId;
 	const ref = useRef(null);
 	const mouse = useMouse();
 
