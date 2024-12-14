@@ -122,20 +122,20 @@ export function SelfCursor() {
 					animate={{ scale: activeTarget ? 1 : 0.33 }}
 					transition={springs.slow()}
 				/>
-				{activeTarget?.data?.writing && (
-					<motion.div
-						className="absolute ml-80"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: activeTarget ? 1 : 0 }}
-						exit={{ opacity: 0 }}
-						transition={springs.xfast()}
-					>
-						<Text className="w-48">
-							Read <TextLink href={"#"}>{activeTarget.data.writing}</TextLink>
-						</Text>
-					</motion.div>
-				)}
 				<AnimatePresence>
+					{activeTarget?.data?.writing && (
+						<motion.div
+							className="absolute ml-80"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: activeTarget ? 1 : 0 }}
+							exit={{ opacity: 0 }}
+							transition={springs.xfast()}
+						>
+							<Text className="w-48">
+								Read <TextLink href={"#"}>{activeTarget.data.writing}</TextLink>
+							</Text>
+						</motion.div>
+					)}
 					{activeTarget?.data?.action && (
 						<motion.div
 							className="absolute ml-80"
