@@ -1,7 +1,7 @@
 "use client";
 
 // React
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Globe
 import createGlobe from "cobe";
@@ -13,16 +13,62 @@ import { useTheme } from "next-themes";
 // Types
 import type { VisitorLog } from "@/app/api/track/route";
 
-export default function Globe({
+// Components
+import { Text } from "@/components/ui/text";
+
+// Time
+import { formatDistanceToNow } from "date-fns";
+import { EscapeTitle } from "@/components/design/escape";
+
+export default function GlobeClient() {
+	const [data, setData] = useState<{
+		visitors: VisitorLog[];
+		lastUpdated: number;
+	}>({
+		visitors: [],
+		lastUpdated: Date.now() - 10000,
+	});
+
+	useEffect(() => {
+		fetch("/api/list")
+			.then((res) => res.json())
+			.then((data) => setData(data));
+	}, []);
+
+	return (
+		<div className="orchestration">
+			<EscapeTitle title="The Globe." />
+			<Globe visitors={data.visitors} />
+			<Text
+				className="text-center"
+				style={
+					{
+						"--stagger-index": 3,
+					} as React.CSSProperties
+				}
+			>
+				A globe of visitors from around the world.
+			</Text>
+			<p
+				className="text-center text-xs text-zinc-500/50 dark:text-zinc-400/50"
+				style={{ "--stagger-index": 4 } as React.CSSProperties}
+			>
+				Last updated{" "}
+				{formatDistanceToNow(data.lastUpdated, { addSuffix: true })}
+			</p>
+		</div>
+	);
+}
+
+export function Globe({
 	visitors,
-	lastUpdated,
 }: {
 	readonly visitors: VisitorLog[];
-	readonly lastUpdated: number;
 }) {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const pointerInteracting = useRef<number | null>(null);
 	const pointerInteractionMovement = useRef(0);
+	const rotationRef = useRef(0);
 	const [{ r }, api] = useSpring(() => ({
 		r: 0,
 		config: {
@@ -45,7 +91,6 @@ export default function Globe({
 		window.addEventListener("resize", onResize);
 		onResize();
 
-		let rotation = 0;
 		if (!canvasRef.current) return;
 
 		const globe = createGlobe(canvasRef.current, {
@@ -70,9 +115,9 @@ export default function Globe({
 					: [],
 			onRender: (state) => {
 				if (!pointerInteracting.current) {
-					rotation += 0.005;
+					rotationRef.current += 0.005;
 				}
-				state.phi = rotation + r.get();
+				state.phi = rotationRef.current + r.get();
 				state.width = width * 2;
 				state.height = width * 2;
 			},
@@ -86,7 +131,7 @@ export default function Globe({
 			globe.destroy();
 			window.removeEventListener("resize", onResize);
 		};
-	}, [visitors, resolvedTheme, r.get]);
+	}, [visitors, resolvedTheme, r]);
 
 	return (
 		<div className="relative mx-auto aspect-square w-full max-w-[600px]">
