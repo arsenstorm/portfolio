@@ -123,7 +123,10 @@ export default async function WritingPage({
 					"prose-hr:my-8 prose-hr:border-zinc-950/10 prose-hr:dark:border-white/10",
 				)}
 			>
-				<EscapeTitle title={writing?.title ?? "Untitled."} />
+				<EscapeTitle
+					title={writing?.title ?? "Untitled."}
+					audioUrl={`/writing/${slug}/audio`}
+				/>
 				{content}
 			</main>
 			<footer className="max-w-2xl mx-auto fixed bottom-0 left-0 right-0 px-4 py-8 flex flex-row justify-between items-center z-20 !animate-none !opacity-100">

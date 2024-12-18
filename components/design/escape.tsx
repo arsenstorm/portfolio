@@ -30,8 +30,12 @@ import clsx from "clsx";
 const TitleContext = createContext<{
 	title: string;
 	setTitle: (title: string) => void;
+	audioUrl: string;
+	setAudioUrl: (audioUrl: string) => void;
 	display: "show" | "none";
 	setDisplay: (display: "show" | "none") => void;
+	audioPlaying: boolean;
+	setAudioPlaying: (audioPlaying: boolean) => void;
 } | null>(null);
 
 export function EscapeProvider({
@@ -43,6 +47,10 @@ export function EscapeProvider({
 	const router = useTransitionRouter();
 	const [title, setTitle] = useState("");
 	const [display, setDisplay] = useState<"show" | "none">("show");
+
+	// Audio
+	const [audioUrl, setAudioUrl] = useState("");
+	const [audioPlaying, setAudioPlaying] = useState(false);
 
 	const returnTo = useMemo(() => {
 		if (pathname.startsWith("/writing/")) return "/writing";
@@ -56,9 +64,27 @@ export function EscapeProvider({
 	useHotkeys([["Escape", handleBack]]);
 
 	const contextValue = useMemo(
-		() => ({ title, setTitle, display, setDisplay }),
-		[title, display],
+		() => ({
+			title,
+			setTitle,
+			display,
+			setDisplay,
+			audioUrl,
+			setAudioUrl,
+			audioPlaying,
+			setAudioPlaying,
+		}),
+		[title, display, audioUrl, audioPlaying],
 	);
+
+	const playAudio = useCallback((url: string) => {
+		setAudioPlaying(true);
+		const audio = new Audio(url);
+		audio.play();
+		audio.addEventListener("ended", () => {
+			setAudioPlaying(false);
+		});
+	}, []);
 
 	useEffect(() => {
 		if (display === "show") setTitle("Arsen Shkrumelyak");
@@ -87,9 +113,55 @@ export function EscapeProvider({
 									"--stagger-index": 1,
 								} as React.CSSProperties
 							}
-							className={clsx(display === "none" && "hidden")}
+							className={clsx(
+								display === "none"
+									? "hidden"
+									: "w-full flex flex-row justify-between items-center",
+							)}
 						>
 							{title}
+							{audioUrl && (
+								<button
+									type="button"
+									onClick={() => playAudio(audioUrl)}
+									className="ml-4 rounded-full p-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-all active:scale-95 flex flex-row items-center justify-center"
+									aria-label={audioPlaying ? "Pause Audio" : "Play Audio"}
+								>
+									{audioPlaying ? (
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											className="w-5 h-5"
+										>
+											<title>Pause Audio</title>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M5.25 7.5A2.25 2.25 0 017.5 5.25h9a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25v-9z"
+											/>
+										</svg>
+									) : (
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											className="w-5 h-5"
+										>
+											<title>Play Audio</title>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347c-.75.412-1.667-.13-1.667-.986V5.653z"
+											/>
+										</svg>
+									)}
+								</button>
+							)}
 						</Heading>
 						<Divider
 							className={clsx(display === "none" && "hidden", "my-4")}
@@ -130,9 +202,11 @@ export function EscapeProvider({
 export function EscapeTitle({
 	title,
 	display = "show",
+	audioUrl,
 }: Readonly<{
 	title?: string;
 	display?: "show" | "none";
+	audioUrl?: string;
 }> &
 	({ display?: "show"; title: string } | { display: "none"; title?: string })) {
 	const context = useContext(TitleContext);
@@ -141,7 +215,8 @@ export function EscapeTitle({
 		if (!context) return;
 		context.setTitle(title ?? "");
 		context.setDisplay(display ?? "show");
-	}, [title, context, display]);
+		context.setAudioUrl(audioUrl ?? "");
+	}, [title, context, display, audioUrl]);
 
 	return null;
 }
