@@ -11,6 +11,7 @@ import {
 	useState,
 	useContext,
 	createContext,
+	useRef,
 } from "react";
 
 // UI
@@ -51,6 +52,7 @@ export function EscapeProvider({
 	// Audio
 	const [audioUrl, setAudioUrl] = useState("");
 	const [audioPlaying, setAudioPlaying] = useState(false);
+	const audioRef = useRef<HTMLAudioElement | null>(null);
 
 	const returnTo = useMemo(() => {
 		if (pathname.startsWith("/writing/")) return "/writing";
@@ -78,13 +80,28 @@ export function EscapeProvider({
 	);
 
 	const playAudio = useCallback((url: string) => {
+		if (audioRef.current) {
+			audioRef.current.pause();
+			audioRef.current = null;
+		}
+
 		setAudioPlaying(true);
 		const audio = new Audio(url);
+		audioRef.current = audio;
 		audio.play();
 		audio.addEventListener("ended", () => {
 			setAudioPlaying(false);
+			audioRef.current = null;
 		});
 	}, []);
+
+	useEffect(() => {
+		if (audioRef.current && audioUrl) {
+			audioRef.current.pause();
+			audioRef.current = null;
+			setAudioPlaying(false);
+		}
+	}, [audioUrl]);
 
 	useEffect(() => {
 		if (display === "show") setTitle("Arsen Shkrumelyak");

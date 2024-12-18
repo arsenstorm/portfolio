@@ -58,10 +58,10 @@ const getWriting = async (slug: string) => {
 			(match) => `“${match.replace(/^> ?/gm, "").trim()}”`,
 		);
 
-	writing = writing.replace(/\[(.*?)\]\([^)]+\)/g, "{{bold}}$1{{/bold}}");
-	writing = writing.replace(/\*\*([\s\S]*?)\*\*/g, "{{bold}}$1{{/bold}}");
+	writing = writing.replace(/\[(.*?)\]\([^)]+\)/g, "$1");
+	writing = writing.replace(/\*\*([\s\S]*?)\*\*/g, "$1");
 
-	writing = writing.replace(/\r\n/g, "\n").replace(/\n\n+/g, "\n\n").trim();
+	writing = writing.replace(/\r\n/g, "\n").replace(/\n\n+/g, "\n...\n").trim();
 
 	return {
 		title,
@@ -128,7 +128,7 @@ export async function GET(
 		audioData = Buffer.concat(chunks);
 	} catch (error) {
 		console.warn(`An audio file for ${slug} does not exist.`);
-		const { writing } = await getWriting(slug);
+		const { title, writing } = await getWriting(slug);
 
 		if (!writing) {
 			return NextResponse.json(
@@ -137,7 +137,10 @@ export async function GET(
 			);
 		}
 
-		audioData = await generateAudio(writing);
+		const text = `${title}\n...\n${writing}`;
+		console.warn(text);
+
+		audioData = await generateAudio(text);
 
 		await s3Client.send(
 			new PutObjectCommand({
