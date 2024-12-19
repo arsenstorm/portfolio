@@ -42,6 +42,9 @@ const TitleContext = createContext<{
 	setAudioPlaying: (audioPlaying: boolean) => void;
 	pageLink: string;
 	setPageLink: (pageLink: string) => void;
+	// Current Word (i.e., the word that is currently being spoken)
+	currentWord: string;
+	setCurrentWord: (currentWord: string) => void;
 } | null>(null);
 
 export function EscapeProvider({
@@ -61,6 +64,7 @@ export function EscapeProvider({
 	const [audioUrl, setAudioUrl] = useState("");
 	const [audioPlaying, setAudioPlaying] = useState(false);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
+	const [currentWord, setCurrentWord] = useState("");
 
 	// Page Link
 	const [pageLink, setPageLink] = useState("");
@@ -86,10 +90,12 @@ export function EscapeProvider({
 			setAudioUrl,
 			audioPlaying,
 			setAudioPlaying,
+			currentWord,
+			setCurrentWord,
 			pageLink,
 			setPageLink,
 		}),
-		[title, display, audioUrl, audioPlaying, pageLink],
+		[title, display, audioUrl, audioPlaying, pageLink, currentWord],
 	);
 
 	const playAudio = useCallback(
@@ -331,6 +337,10 @@ export function EscapeProvider({
 	);
 }
 
+export function useTitleContext() {
+	return useContext(TitleContext);
+}
+
 export function EscapeTitle({
 	title,
 	display = "show",
@@ -343,7 +353,7 @@ export function EscapeTitle({
 	pageLink?: string;
 }> &
 	({ display?: "show"; title: string } | { display: "none"; title?: string })) {
-	const context = useContext(TitleContext);
+	const context = useTitleContext();
 
 	useEffect(() => {
 		if (!context) return;

@@ -11,11 +11,16 @@ import WritingsPage, { readWriting } from "@/mdx/compile";
 
 // Types
 import type { Metadata } from "next";
-import { EscapeTitle } from "@/components/design/escape";
 
 // Hotkeys
 import { Hotkeys } from "@/components/hotkeys/writings";
+
+// Components
 import { Text } from "@/components/ui/text";
+import { EscapeTitle } from "@/components/design/escape";
+
+// React
+import { Suspense } from "react";
 
 export async function generateStaticParams() {
 	const writings = await getAllWriting();
@@ -89,8 +94,6 @@ export default async function WritingPage({
 	const next = writings?.[index - 1]?.slug;
 	const writing = writings[index];
 
-	const content = await WritingsPage({ slug });
-
 	return (
 		<>
 			<main
@@ -129,36 +132,40 @@ export default async function WritingPage({
 					audioUrl={`/writing/${slug}/audio`}
 					pageLink={`https://arsenstorm.com/writing/${slug}`}
 				/>
-				{content}
+				<Suspense fallback={<div />}>
+					<WritingsPage slug={slug} />
+				</Suspense>
 			</main>
 			<footer className="max-w-2xl mx-auto fixed bottom-0 left-0 right-0 px-4 py-8 flex flex-row justify-between items-center z-20 !animate-none !opacity-100">
 				<Hotkeys previous={previous} next={next} />
-				<Button
-					outline
-					data-nosnippet
-					className="!text-xs !bg-white/50 dark:!bg-zinc-950/50"
-					disabled={!previous}
-					href={previous ? `/writing/${previous}` : undefined}
-					mouse={{ action: "Previous", this: "writing" }}
-				>
-					&larr; Previous
-				</Button>
-				<div className="flex flex-col items-center">
-					<Text>{writing?.title ?? "Untitled."}</Text>
-					<Text className="!text-xs opacity-50">
-						{formatDate(writing?.date)}
-					</Text>
+				<div className="flex flex-row justify-between items-center w-full">
+					<Button
+						outline
+						data-nosnippet
+						className="!text-xs !bg-white/50 dark:!bg-zinc-950/50 w-24"
+						disabled={!previous}
+						href={previous ? `/writing/${previous}` : undefined}
+						mouse={{ action: "Previous", this: "writing" }}
+					>
+						&larr; Previous
+					</Button>
+					<div className="flex flex-col items-center flex-1 px-4">
+						<Text>{writing?.title ?? "Untitled."}</Text>
+						<Text className="!text-xs opacity-50">
+							{formatDate(writing?.date)}
+						</Text>
+					</div>
+					<Button
+						outline
+						data-nosnippet
+						className="!text-xs !bg-white/50 dark:!bg-zinc-950/50 w-24"
+						disabled={!next}
+						href={next ? `/writing/${next}` : undefined}
+						mouse={{ action: "Next", this: "writing" }}
+					>
+						Next &rarr;
+					</Button>
 				</div>
-				<Button
-					outline
-					data-nosnippet
-					className="!text-xs !bg-white/50 dark:!bg-zinc-950/50"
-					disabled={!next}
-					href={next ? `/writing/${next}` : undefined}
-					mouse={{ action: "Next", this: "writing" }}
-				>
-					Next &rarr;
-				</Button>
 			</footer>
 		</>
 	);
