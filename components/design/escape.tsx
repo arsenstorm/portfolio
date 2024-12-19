@@ -171,7 +171,10 @@ export function EscapeProvider({
 							{title}
 							<div className="flex flex-row items-center gap-x-2">
 								{pageLink && (
-									<MouseTarget data={{ action: "Copy", this: "page link" }}>
+									<MouseTarget
+										data={{ action: "Copy", this: "page link" }}
+										className="rounded-full overflow-hidden"
+									>
 										<button
 											type="button"
 											onClick={copyPageLink}
@@ -232,7 +235,10 @@ export function EscapeProvider({
 									</MouseTarget>
 								)}
 								{audioUrl && (
-									<MouseTarget data={{ action: "Play", this: "audio" }}>
+									<MouseTarget
+										data={{ action: "Play", this: "audio" }}
+										className="rounded-full overflow-hidden"
+									>
 										<button
 											type="button"
 											onClick={() => playAudio(audioUrl)}
