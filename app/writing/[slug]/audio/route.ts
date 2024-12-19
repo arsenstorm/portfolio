@@ -219,7 +219,6 @@ export async function GET(
 			chunks.push(chunk);
 		}
 		audioData = Buffer.concat(chunks);
-		throw new Error("[DEBUG] Replace with new Audio.");
 	} catch (error) {
 		console.warn(`An audio file for ${slug} does not exist.`);
 		const { title, writing, speakers } = await getWriting(slug);
