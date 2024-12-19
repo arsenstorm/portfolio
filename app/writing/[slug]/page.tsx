@@ -138,6 +138,7 @@ export default async function WritingPage({
 					className="!text-xs !bg-white/50 dark:!bg-zinc-950/50"
 					disabled={!previous}
 					href={previous ? `/writing/${previous}` : undefined}
+					mouse={{ action: "Previous", this: "writing" }}
 				>
 					&larr; Previous
 				</Button>
@@ -153,6 +154,7 @@ export default async function WritingPage({
 					className="!text-xs !bg-white/50 dark:!bg-zinc-950/50"
 					disabled={!next}
 					href={next ? `/writing/${next}` : undefined}
+					mouse={{ action: "Next", this: "writing" }}
 				>
 					Next &rarr;
 				</Button>
