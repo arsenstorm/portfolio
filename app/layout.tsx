@@ -1,4 +1,5 @@
 // Functions
+import Head from "next/head";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -73,6 +74,9 @@ export default async function RootLayout({
 				suppressHydrationWarning
 				className="bg-zinc-50 dark:bg-zinc-950"
 			>
+				<Head>
+					<link rel="canonical" href="https://arsenstorm.com" />
+				</Head>
 				<body className={clsx(inter.className, "min-h-screen")}>
 					<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
 						<MouseProvider>
