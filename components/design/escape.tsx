@@ -245,39 +245,51 @@ export function EscapeProvider({
 											className="rounded-full p-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-all active:scale-95 flex flex-row items-center justify-center"
 											aria-label={audioPlaying ? "Pause Audio" : "Play Audio"}
 										>
-											{audioPlaying ? (
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-													fill="none"
-													stroke="currentColor"
-													className="w-5 h-5"
-												>
-													<title>Pause Audio</title>
-													<path
-														strokeLinecap="round"
-														strokeLinejoin="round"
-														strokeWidth={2}
-														d="M5.25 7.5A2.25 2.25 0 017.5 5.25h9a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25v-9z"
-													/>
-												</svg>
-											) : (
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-													fill="none"
-													stroke="currentColor"
-													className="w-5 h-5"
-												>
-													<title>Play Audio</title>
-													<path
-														strokeLinecap="round"
-														strokeLinejoin="round"
-														strokeWidth={2}
-														d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347c-.75.412-1.667-.13-1.667-.986V5.653z"
-													/>
-												</svg>
-											)}
+											<AnimatePresence mode="wait">
+												{audioPlaying ? (
+													<motion.svg
+														key="pause"
+														initial={{ opacity: 0, scale: 0.3 }}
+														animate={{ opacity: 1, scale: 1 }}
+														exit={{ opacity: 0, scale: 0.3 }}
+														transition={{ duration: 0.1 }}
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 24 24"
+														fill="none"
+														stroke="currentColor"
+														className="w-5 h-5"
+													>
+														<title>Pause Audio</title>
+														<path
+															strokeLinecap="round"
+															strokeLinejoin="round"
+															strokeWidth={2}
+															d="M5.25 7.5A2.25 2.25 0 017.5 5.25h9a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25v-9z"
+														/>
+													</motion.svg>
+												) : (
+													<motion.svg
+														key="play"
+														initial={{ opacity: 0, scale: 0.3 }}
+														animate={{ opacity: 1, scale: 1 }}
+														exit={{ opacity: 0, scale: 0.3 }}
+														transition={{ duration: 0.1 }}
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 24 24"
+														fill="none"
+														stroke="currentColor"
+														className="w-5 h-5"
+													>
+														<title>Play Audio</title>
+														<path
+															strokeLinecap="round"
+															strokeLinejoin="round"
+															strokeWidth={2}
+															d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347c-.75.412-1.667-.13-1.667-.986V5.653z"
+														/>
+													</motion.svg>
+												)}
+											</AnimatePresence>
 										</button>
 									</MouseTarget>
 								)}
