@@ -127,6 +127,7 @@ export default async function WritingPage({
 				<EscapeTitle
 					title={writing?.title ?? "Untitled."}
 					audioUrl={`/writing/${slug}/audio`}
+					pageLink={`https://arsenstorm.com/writing/${slug}`}
 				/>
 				{content}
 			</main>

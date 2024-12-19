@@ -22,12 +22,14 @@ import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 
 // Hooks
-import { useHotkeys } from "@mantine/hooks";
+import { useHotkeys, useClipboard } from "@mantine/hooks";
 
 // View Transitions
 import { useTransitionRouter } from "next-view-transitions";
 import clsx from "clsx";
 import { MouseTarget } from "../ui/frost/mouse";
+import { toast } from "sonner";
+import { AnimatePresence, motion } from "framer-motion";
 
 const TitleContext = createContext<{
 	title: string;
@@ -38,6 +40,8 @@ const TitleContext = createContext<{
 	setDisplay: (display: "show" | "none") => void;
 	audioPlaying: boolean;
 	setAudioPlaying: (audioPlaying: boolean) => void;
+	pageLink: string;
+	setPageLink: (pageLink: string) => void;
 } | null>(null);
 
 export function EscapeProvider({
@@ -46,6 +50,9 @@ export function EscapeProvider({
 	children: React.ReactNode;
 }>) {
 	const pathname = usePathname();
+	const clipboard = useClipboard({
+		timeout: 1000,
+	});
 	const router = useTransitionRouter();
 	const [title, setTitle] = useState("");
 	const [display, setDisplay] = useState<"show" | "none">("show");
@@ -54,6 +61,9 @@ export function EscapeProvider({
 	const [audioUrl, setAudioUrl] = useState("");
 	const [audioPlaying, setAudioPlaying] = useState(false);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
+
+	// Page Link
+	const [pageLink, setPageLink] = useState("");
 
 	const returnTo = useMemo(() => {
 		if (pathname.startsWith("/writing/")) return "/writing";
@@ -76,8 +86,10 @@ export function EscapeProvider({
 			setAudioUrl,
 			audioPlaying,
 			setAudioPlaying,
+			pageLink,
+			setPageLink,
 		}),
-		[title, display, audioUrl, audioPlaying],
+		[title, display, audioUrl, audioPlaying, pageLink],
 	);
 
 	const playAudio = useCallback(
@@ -109,6 +121,11 @@ export function EscapeProvider({
 		},
 		[audioPlaying],
 	);
+
+	const copyPageLink = useCallback(() => {
+		clipboard.copy(pageLink);
+		toast.success("Copied link to clipboard!");
+	}, [pageLink, clipboard]);
 
 	useEffect(() => {
 		if (audioRef.current && audioUrl) {
@@ -152,50 +169,113 @@ export function EscapeProvider({
 							)}
 						>
 							{title}
-							{audioUrl && (
-								<MouseTarget data={{ action: "Play", this: "audio" }}>
-									<button
-										type="button"
-										onClick={() => playAudio(audioUrl)}
-										className="ml-4 rounded-full p-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-all active:scale-95 flex flex-row items-center justify-center"
-										aria-label={audioPlaying ? "Pause Audio" : "Play Audio"}
-									>
-										{audioPlaying ? (
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-												fill="none"
-												stroke="currentColor"
-												className="w-5 h-5"
-											>
-												<title>Pause Audio</title>
-												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													strokeWidth={2}
-													d="M5.25 7.5A2.25 2.25 0 017.5 5.25h9a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25v-9z"
-												/>
-											</svg>
-										) : (
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-												fill="none"
-												stroke="currentColor"
-												className="w-5 h-5"
-											>
-												<title>Play Audio</title>
-												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													strokeWidth={2}
-													d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347c-.75.412-1.667-.13-1.667-.986V5.653z"
-												/>
-											</svg>
-										)}
-									</button>
-								</MouseTarget>
-							)}
+							<div className="flex flex-row items-center gap-x-2">
+								{pageLink && (
+									<MouseTarget data={{ action: "Copy", this: "page link" }}>
+										<button
+											type="button"
+											onClick={copyPageLink}
+											className={clsx(
+												"rounded-full p-2.5 transition-all active:scale-95 flex flex-row items-center justify-center",
+												clipboard.copied
+													? "bg-green-100 dark:bg-green-900/50"
+													: "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800",
+											)}
+											aria-label="Copy Page Link"
+										>
+											<AnimatePresence mode="wait">
+												{clipboard.copied ? (
+													<motion.svg
+														key="check"
+														initial={{ opacity: 0, scale: 0.3 }}
+														animate={{ opacity: 1, scale: 1 }}
+														exit={{ opacity: 0, scale: 0.3 }}
+														transition={{ duration: 0.1 }}
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 24 24"
+														fill="none"
+														stroke="currentColor"
+														className="w-5 h-5"
+													>
+														<title>Copied!</title>
+														<path
+															strokeLinecap="round"
+															strokeLinejoin="round"
+															strokeWidth={2}
+															d="M4.5 12.75l6 6 9-13.5"
+														/>
+													</motion.svg>
+												) : (
+													<motion.svg
+														key="link"
+														initial={{ opacity: 0, scale: 0.3 }}
+														animate={{ opacity: 1, scale: 1 }}
+														exit={{ opacity: 0, scale: 0.3 }}
+														transition={{ duration: 0.1 }}
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 24 24"
+														fill="none"
+														stroke="currentColor"
+														className="w-5 h-5"
+													>
+														<title>Copy Link</title>
+														<path
+															strokeLinecap="round"
+															strokeLinejoin="round"
+															strokeWidth={2}
+															d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
+														/>
+													</motion.svg>
+												)}
+											</AnimatePresence>
+										</button>
+									</MouseTarget>
+								)}
+								{audioUrl && (
+									<MouseTarget data={{ action: "Play", this: "audio" }}>
+										<button
+											type="button"
+											onClick={() => playAudio(audioUrl)}
+											className="rounded-full p-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-all active:scale-95 flex flex-row items-center justify-center"
+											aria-label={audioPlaying ? "Pause Audio" : "Play Audio"}
+										>
+											{audioPlaying ? (
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													className="w-5 h-5"
+												>
+													<title>Pause Audio</title>
+													<path
+														strokeLinecap="round"
+														strokeLinejoin="round"
+														strokeWidth={2}
+														d="M5.25 7.5A2.25 2.25 0 017.5 5.25h9a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25v-9z"
+													/>
+												</svg>
+											) : (
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													className="w-5 h-5"
+												>
+													<title>Play Audio</title>
+													<path
+														strokeLinecap="round"
+														strokeLinejoin="round"
+														strokeWidth={2}
+														d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347c-.75.412-1.667-.13-1.667-.986V5.653z"
+													/>
+												</svg>
+											)}
+										</button>
+									</MouseTarget>
+								)}
+							</div>
 						</Heading>
 						<Divider
 							className={clsx(display === "none" && "hidden", "my-4")}
@@ -237,10 +317,12 @@ export function EscapeTitle({
 	title,
 	display = "show",
 	audioUrl,
+	pageLink,
 }: Readonly<{
 	title?: string;
 	display?: "show" | "none";
 	audioUrl?: string;
+	pageLink?: string;
 }> &
 	({ display?: "show"; title: string } | { display: "none"; title?: string })) {
 	const context = useContext(TitleContext);
@@ -250,7 +332,8 @@ export function EscapeTitle({
 		context.setTitle(title ?? "");
 		context.setDisplay(display ?? "show");
 		context.setAudioUrl(audioUrl ?? "");
-	}, [title, context, display, audioUrl]);
+		context.setPageLink(pageLink ?? "");
+	}, [title, context, display, audioUrl, pageLink]);
 
 	return null;
 }

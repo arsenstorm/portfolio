@@ -31,6 +31,9 @@ import { Noise } from "@/components/ui/frost/noise";
 // Mouse
 import { MouseProvider } from "@/components/ui/frost/mouse";
 
+// Toaster
+import { Toaster } from "sonner";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -76,6 +79,7 @@ export default async function RootLayout({
 							<VisitorProvider>
 								<CursorsProvider>
 									<SelfCursor />
+									<Toaster richColors theme="system" />
 									<EscapeProvider>{children}</EscapeProvider>
 								</CursorsProvider>
 							</VisitorProvider>
