@@ -85,8 +85,8 @@ export default async function WritingPage({
 
 	const index = writings.findIndex((w) => w.slug === slug);
 
-	const previous = writings?.[index - 1]?.slug;
-	const next = writings?.[index + 1]?.slug;
+	const previous = writings?.[index + 1]?.slug;
+	const next = writings?.[index - 1]?.slug;
 	const writing = writings[index];
 
 	const content = await WritingsPage({ slug });

@@ -1,6 +1,6 @@
 // Node
 import path from "node:path";
-import fs from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 
 // S3
 import {
@@ -17,8 +17,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getAllWriting } from "@/utils/get-all-writing";
 
 const VOICE_IDS = {
-	1: "lFCDKfAmymUd9c68vZhW",
-	2: "U4IxWQ3B5B0suleGgLcn",
+	1: "1dNax2RqtrIkgRHBEqia",
+	2: "3rWBcFHu7rpPUEJQYEqD",
 };
 
 const s3Client = new S3Client({
@@ -35,7 +35,7 @@ const elevenlabs = new ElevenLabsClient({
 });
 
 const getWriting = async (slug: string) => {
-	let writing = await fs.readFile(
+	let writing = await readFile(
 		path.resolve(path.join(process.cwd(), "writings", `${slug}.mdx`)),
 		"utf8",
 	);
@@ -114,7 +114,7 @@ const getWriting = async (slug: string) => {
 async function generateAudio(text: string, speakers: number): Promise<Buffer> {
 	if (speakers === 1) {
 		const response = await elevenlabs.textToSpeech.convert(VOICE_IDS[1], {
-			model_id: "eleven_turbo_v2",
+			model_id: "eleven_flash_v2_5",
 			output_format: "mp3_44100_128",
 			text: text.replace(/1: /g, ""),
 			voice_settings: {
@@ -136,26 +136,34 @@ async function generateAudio(text: string, speakers: number): Promise<Buffer> {
 		const audioChunks: Buffer[] = [];
 
 		for (const segment of segments) {
-			if (segment.includes("...")) {
-				const SAMPLES_PER_SECOND = 44100;
-				const PAUSE_DURATION = 0.1;
-				const silenceLength = Math.floor(SAMPLES_PER_SECOND * PAUSE_DURATION);
-				const silence = segment.split("...").length - 1;
+			if (segment.includes("<break")) {
+				const timeRegex = /time="([\d.]+)s"/;
+				const timeMatch = timeRegex.exec(segment);
+				if (timeMatch) {
+					const SAMPLES_PER_SECOND = 44100;
+					const pauseDuration = Number.parseFloat(timeMatch[1]);
+					const silenceLength = Math.floor(SAMPLES_PER_SECOND * pauseDuration);
 
-				audioChunks.push(Buffer.from(new Uint8Array(silenceLength * silence)));
-				continue;
+					audioChunks.push(Buffer.from(new Uint8Array(silenceLength)));
+					continue;
+				}
 			}
 
-			const [speakerNum, ...textParts] = segment.split(": ");
+			const breakRegex = /<break[^>]*>/g;
+			const [speakerNum, ...textParts] = segment
+				.replace(breakRegex, "")
+				.split(": ");
 			const speaker = Number.parseInt(speakerNum);
 			const line = textParts.join(": ").trim();
+
+			console.log(speaker, line, "started");
 
 			if (!line) continue;
 
 			const response = await elevenlabs.textToSpeech.convert(
 				VOICE_IDS[speaker as keyof typeof VOICE_IDS] ?? VOICE_IDS[1],
 				{
-					model_id: "eleven_multilingual_v2",
+					model_id: "eleven_flash_v2_5",
 					output_format: "mp3_44100_128",
 					text: line,
 					voice_settings: {
@@ -170,6 +178,8 @@ async function generateAudio(text: string, speakers: number): Promise<Buffer> {
 				chunks.push(chunk);
 			}
 			audioChunks.push(Buffer.concat(chunks));
+
+			console.log(speaker, line, "finished");
 		}
 
 		return Buffer.concat(audioChunks);
@@ -209,6 +219,7 @@ export async function GET(
 			chunks.push(chunk);
 		}
 		audioData = Buffer.concat(chunks);
+		throw new Error("[DEBUG] Replace with new Audio.");
 	} catch (error) {
 		console.warn(`An audio file for ${slug} does not exist.`);
 		const { title, writing, speakers } = await getWriting(slug);
