@@ -80,9 +80,11 @@ const getWriting = async (slug: string) => {
 
 	writing = writing.replace(/(?<!1: )“(?!:)/g, "1: “");
 
+	writing = writing.replace(/\*/g, "");
+
 	let speakers = 1;
 
-	if ((writing.match(/1: /g) || []).length >= 3) {
+	if ((writing.match(/1: /g) || []).length >= 2) {
 		const lines = writing.split("\n");
 		const dialogueLines = lines.filter((line) => line.startsWith("1: "));
 		const isOdd = dialogueLines.length % 2 !== 0;
@@ -218,7 +220,7 @@ export async function GET(
 			);
 		}
 
-		const text = `1: ${title}\n<break time="1.0s" />\n${writing}`;
+		const text = `1: "${title}"\n<break time="1.0s" />\n${writing}`;
 		console.warn(text);
 
 		audioData = await generateAudio(text, speakers);

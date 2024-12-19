@@ -15,6 +15,7 @@ import { EscapeTitle } from "@/components/design/escape";
 
 // Hotkeys
 import { Hotkeys } from "@/components/hotkeys/writings";
+import { Text } from "@/components/ui/text";
 
 export async function generateStaticParams() {
 	const writings = await getAllWriting();
@@ -140,6 +141,12 @@ export default async function WritingPage({
 				>
 					&larr; Previous
 				</Button>
+				<div className="flex flex-col items-center">
+					<Text>{writing?.title ?? "Untitled."}</Text>
+					<Text className="!text-xs opacity-50">
+						{formatDate(writing?.date)}
+					</Text>
+				</div>
 				<Button
 					outline
 					data-nosnippet
