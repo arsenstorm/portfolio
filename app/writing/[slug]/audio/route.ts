@@ -16,6 +16,11 @@ import { ElevenLabsClient } from "elevenlabs";
 import { type NextRequest, NextResponse } from "next/server";
 import { getAllWriting } from "@/utils/get-all-writing";
 
+const VOICE_IDS = {
+	1: "lFCDKfAmymUd9c68vZhW",
+	2: "U4IxWQ3B5B0suleGgLcn",
+};
+
 const s3Client = new S3Client({
 	endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
 	credentials: {
@@ -61,28 +66,60 @@ const getWriting = async (slug: string) => {
 	writing = writing.replace(/\[(.*?)\]\([^)]+\)/g, "$1");
 	writing = writing.replace(/\*\*([\s\S]*?)\*\*/g, "$1");
 
-	writing = writing.replace(/\r\n/g, "\n").replace(/\n\n+/g, "\n...\n").trim();
+	writing = writing
+		.replace(/\r\n/g, "\n")
+		.replace(/\n\n+/g, '\n<break time="0.2s" />\n')
+		.trim();
+
+	writing = writing
+		.replaceAll(">\n", "> \n")
+		.replace(
+			/(^>(?:[^\n]+)(?:\n>(?:[^\n]+))*)/gm,
+			(match) => `1: "${match.replace(/^> ?/gm, "").trim()}"`,
+		);
+
+	writing = writing.replace(/(?<!1: )“(?!:)/g, "1: “");
+
+	let speakers = 1;
+
+	if ((writing.match(/1: /g) || []).length >= 3) {
+		const lines = writing.split("\n");
+		const dialogueLines = lines.filter((line) => line.startsWith("1: "));
+		const isOdd = dialogueLines.length % 2 !== 0;
+		let speakerNumber = isOdd ? 1 : 2;
+
+		writing = lines
+			.map((line) => {
+				if (line.startsWith("1: ")) {
+					const prefix = `${speakerNumber}: `;
+					speakerNumber = speakerNumber === 1 ? 2 : 1;
+					return line.replace("1: ", prefix);
+				}
+				return line;
+			})
+			.join("\n");
+
+		speakers = 2;
+	}
 
 	return {
 		title,
 		writing,
+		speakers,
 	};
 };
 
-async function generateAudio(writing: string): Promise<Buffer> {
-	try {
-		const response = await elevenlabs.textToSpeech.convert(
-			"L0Dsvb3SLTyegXwtm47J",
-			{
-				model_id: "eleven_turbo_v2",
-				output_format: "mp3_44100_128",
-				text: writing,
-				voice_settings: {
-					stability: 1,
-					similarity_boost: 0.5,
-				},
+async function generateAudio(text: string, speakers: number): Promise<Buffer> {
+	if (speakers === 1) {
+		const response = await elevenlabs.textToSpeech.convert(VOICE_IDS[1], {
+			model_id: "eleven_turbo_v2",
+			output_format: "mp3_44100_128",
+			text: text.replace(/1: /g, ""),
+			voice_settings: {
+				stability: 1,
+				similarity_boost: 0.5,
 			},
-		);
+		});
 
 		const chunks = [];
 		for await (const chunk of response) {
@@ -90,6 +127,50 @@ async function generateAudio(writing: string): Promise<Buffer> {
 		}
 
 		return Buffer.concat(chunks);
+	}
+
+	try {
+		const segments = text.split("\n").filter((line) => line.trim());
+		const audioChunks: Buffer[] = [];
+
+		for (const segment of segments) {
+			if (segment.includes("...")) {
+				const SAMPLES_PER_SECOND = 44100;
+				const PAUSE_DURATION = 0.1;
+				const silenceLength = Math.floor(SAMPLES_PER_SECOND * PAUSE_DURATION);
+				const silence = segment.split("...").length - 1;
+
+				audioChunks.push(Buffer.from(new Uint8Array(silenceLength * silence)));
+				continue;
+			}
+
+			const [speakerNum, ...textParts] = segment.split(": ");
+			const speaker = Number.parseInt(speakerNum);
+			const line = textParts.join(": ").trim();
+
+			if (!line) continue;
+
+			const response = await elevenlabs.textToSpeech.convert(
+				VOICE_IDS[speaker as keyof typeof VOICE_IDS] ?? VOICE_IDS[1],
+				{
+					model_id: "eleven_multilingual_v2",
+					output_format: "mp3_44100_128",
+					text: line,
+					voice_settings: {
+						stability: 1,
+						similarity_boost: 0.5,
+					},
+				},
+			);
+
+			const chunks = [];
+			for await (const chunk of response) {
+				chunks.push(chunk);
+			}
+			audioChunks.push(Buffer.concat(chunks));
+		}
+
+		return Buffer.concat(audioChunks);
 	} catch (error) {
 		console.error("ElevenLabs API error:", error);
 		throw error;
@@ -128,7 +209,7 @@ export async function GET(
 		audioData = Buffer.concat(chunks);
 	} catch (error) {
 		console.warn(`An audio file for ${slug} does not exist.`);
-		const { title, writing } = await getWriting(slug);
+		const { title, writing, speakers } = await getWriting(slug);
 
 		if (!writing) {
 			return NextResponse.json(
@@ -137,10 +218,10 @@ export async function GET(
 			);
 		}
 
-		const text = `${title}\n...\n${writing}`;
+		const text = `1: ${title}\n<break time="1.0s" />\n${writing}`;
 		console.warn(text);
 
-		audioData = await generateAudio(text);
+		audioData = await generateAudio(text, speakers);
 
 		await s3Client.send(
 			new PutObjectCommand({
