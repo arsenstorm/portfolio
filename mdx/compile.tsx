@@ -41,7 +41,7 @@ export async function readWriting(slug: string) {
 	return await readFile(filePath, { encoding: "utf8" });
 }
 
-const MDXLink = ({ href, ...props }: ComponentProps<"a">) => {
+export const MDXLink = ({ href, ...props }: ComponentProps<"a">) => {
 	return <Link href={href ?? "#"} {...props} />;
 };
 

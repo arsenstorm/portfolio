@@ -6,9 +6,6 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/format-date";
 import { getAllWriting } from "@/utils/get-all-writing";
 
-// MDX
-import WritingsPage, { readWriting } from "@/mdx/compile";
-
 // Types
 import type { Metadata } from "next";
 
@@ -19,8 +16,9 @@ import { Hotkeys } from "@/components/hotkeys/writings";
 import { Text } from "@/components/ui/text";
 import { EscapeTitle } from "@/components/design/escape";
 
-// React
-import { Suspense } from "react";
+// Markdown
+import { readWriting } from "@/mdx/compile";
+import WritingPageClient from "./page.client";
 
 export async function generateStaticParams() {
 	const writings = await getAllWriting();
@@ -94,6 +92,11 @@ export default async function WritingPage({
 	const next = writings?.[index - 1]?.slug;
 	const writing = writings[index];
 
+	const markdown = ((await readWriting(writing.slug)) ?? "").replace(
+		/---[\s\S]*?---\s*/,
+		"",
+	);
+
 	return (
 		<>
 			<main
@@ -132,9 +135,7 @@ export default async function WritingPage({
 					audioUrl={`/writing/${slug}/audio`}
 					pageLink={`https://arsenstorm.com/writing/${slug}`}
 				/>
-				<Suspense fallback={<div />}>
-					<WritingsPage slug={slug} />
-				</Suspense>
+				<WritingPageClient markdown={markdown} />
 			</main>
 			<footer className="max-w-2xl mx-auto fixed bottom-0 left-0 right-0 px-4 py-8 flex flex-row justify-between items-center z-20 !animate-none !opacity-100">
 				<Hotkeys previous={previous} next={next} />
