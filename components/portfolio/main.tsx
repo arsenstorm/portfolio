@@ -238,6 +238,7 @@ export default function Portfolio({
 					href="https://twitter.com/arsenstorm"
 					target="_blank"
 					rel="noopener noreferrer"
+					mouse={{ action: "Connect", this: "on Twitter" }}
 				>
 					Twitter
 				</TextLink>{" "}
@@ -246,6 +247,7 @@ export default function Portfolio({
 					href="https://www.linkedin.com/in/arsenstorm"
 					target="_blank"
 					rel="noopener noreferrer"
+					mouse={{ action: "Connect", this: "on LinkedIn" }}
 				>
 					LinkedIn
 				</TextLink>
