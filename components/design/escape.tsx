@@ -15,21 +15,21 @@ import {
 } from "react";
 
 // UI
+import clsx from "clsx";
+import { toast } from "sonner";
 import { Link } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
+import { MouseTarget } from "@/components/ui/frost/mouse";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Hooks
-import { useHotkeys, useClipboard } from "@mantine/hooks";
+import { useClipboard, useHotkeys } from "@mantine/hooks";
 
 // View Transitions
 import { useTransitionRouter } from "next-view-transitions";
-import clsx from "clsx";
-import { MouseTarget } from "../ui/frost/mouse";
-import { toast } from "sonner";
-import { AnimatePresence, motion } from "framer-motion";
 
 const TitleContext = createContext<{
 	title: string;
@@ -40,8 +40,14 @@ const TitleContext = createContext<{
 	setDisplay: (display: "show" | "none") => void;
 	audioPlaying: boolean;
 	setAudioPlaying: (audioPlaying: boolean) => void;
-	pageLink: string;
-	setPageLink: (pageLink: string) => void;
+	extraLink: string;
+	setExtraLink: (extraLink: string) => void;
+	extraLinkHint: { action: string; this: string } | null;
+	setExtraLinkHint: (
+		extraLinkHint: { action: string; this: string } | null,
+	) => void;
+	extraLinkIcon: React.ReactNode;
+	setExtraLinkIcon: (extraLinkIcon: React.ReactNode) => void;
 	// Current Word (i.e., the word that is currently being spoken)
 	currentWord: string;
 	setCurrentWord: (currentWord: string) => void;
@@ -67,11 +73,17 @@ export function EscapeProvider({
 	const [currentWord, setCurrentWord] = useState("");
 
 	// Page Link
-	const [pageLink, setPageLink] = useState("");
+	const [extraLink, setExtraLink] = useState("");
+	const [extraLinkIcon, setExtraLinkIcon] = useState<React.ReactNode>(null);
+	const [extraLinkHint, setExtraLinkHint] = useState<{
+		action: string;
+		this: string;
+	} | null>(null);
 
 	const returnTo = useMemo(() => {
-		if (pathname.startsWith("/writing/")) return "/writing";
-		return "/";
+		if (pathname === "/") return "/";
+		const segments = pathname.split("/").filter(Boolean);
+		return segments.length > 1 ? `/${segments.slice(0, -1).join("/")}` : "/";
 	}, [pathname]);
 
 	const handleBack = useCallback(() => {
@@ -92,10 +104,23 @@ export function EscapeProvider({
 			setAudioPlaying,
 			currentWord,
 			setCurrentWord,
-			pageLink,
-			setPageLink,
+			extraLink,
+			setExtraLink,
+			extraLinkIcon,
+			setExtraLinkIcon,
+			extraLinkHint,
+			setExtraLinkHint,
 		}),
-		[title, display, audioUrl, audioPlaying, pageLink, currentWord],
+		[
+			title,
+			display,
+			audioUrl,
+			audioPlaying,
+			currentWord,
+			extraLink,
+			extraLinkIcon,
+			extraLinkHint,
+		],
 	);
 
 	const playAudio = useCallback(
@@ -129,9 +154,9 @@ export function EscapeProvider({
 	);
 
 	const copyPageLink = useCallback(() => {
-		clipboard.copy(pageLink);
+		clipboard.copy(`https://arsenstorm.com/${pathname.replaceAll("//", "/")}`);
 		toast.success("Copied link to clipboard!");
-	}, [pageLink, clipboard]);
+	}, [clipboard, pathname]);
 
 	useEffect(() => {
 		if (audioRef.current && audioUrl) {
@@ -152,7 +177,7 @@ export function EscapeProvider({
 					{pathname !== "/" ? (
 						<Link
 							href={returnTo}
-							mouse={{ action: "Go", this: "back home" }}
+							mouse={{ action: "Go", this: "back" }}
 							className="orchestration flex flex-row items-center gap-x-2"
 						>
 							<Badge className="!text-xs">Esc</Badge>
@@ -174,71 +199,40 @@ export function EscapeProvider({
 									: "w-full flex flex-row justify-between items-center",
 							)}
 						>
-							{title}
+							<MouseTarget
+								data={{ action: "Copy", this: "page link" }}
+								onClick={copyPageLink}
+							>
+								{title}
+							</MouseTarget>
 							<div className="flex flex-row items-center gap-x-2">
-								{pageLink && (
-									<MouseTarget
-										data={{ action: "Copy", this: "page link" }}
-										className="rounded-full overflow-hidden"
+								{extraLink && (
+									<Link
+										href={extraLink}
+										mouse={{
+											action: extraLinkHint?.action ?? "Go",
+											this: extraLinkHint?.this ?? "somewhere",
+										}}
+										className="rounded-full p-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 transition-all active:scale-95 flex flex-row items-center justify-center"
 									>
-										<button
-											type="button"
-											onClick={copyPageLink}
-											className={clsx(
-												"rounded-full p-2.5 transition-all active:scale-95 flex flex-row items-center justify-center",
-												clipboard.copied
-													? "bg-green-100 dark:bg-green-900/50"
-													: "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800",
-											)}
-											aria-label="Copy Page Link"
-										>
-											<AnimatePresence mode="wait">
-												{clipboard.copied ? (
-													<motion.svg
-														key="check"
-														initial={{ opacity: 0, scale: 0.3 }}
-														animate={{ opacity: 1, scale: 1 }}
-														exit={{ opacity: 0, scale: 0.3 }}
-														transition={{ duration: 0.1 }}
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 24 24"
-														fill="none"
-														stroke="currentColor"
-														className="w-5 h-5"
-													>
-														<title>Copied!</title>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															strokeWidth={2}
-															d="M4.5 12.75l6 6 9-13.5"
-														/>
-													</motion.svg>
-												) : (
-													<motion.svg
-														key="link"
-														initial={{ opacity: 0, scale: 0.3 }}
-														animate={{ opacity: 1, scale: 1 }}
-														exit={{ opacity: 0, scale: 0.3 }}
-														transition={{ duration: 0.1 }}
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 24 24"
-														fill="none"
-														stroke="currentColor"
-														className="w-5 h-5"
-													>
-														<title>Copy Link</title>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															strokeWidth={2}
-															d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
-														/>
-													</motion.svg>
-												)}
-											</AnimatePresence>
-										</button>
-									</MouseTarget>
+										{extraLinkIcon ?? (
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												className="size-5"
+												strokeWidth={2}
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											>
+												<title>{/* extra link */}</title>
+												<circle cx="12" cy="12" r="10" />
+												<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+												<path d="M12 17h.01" />
+											</svg>
+										)}
+									</Link>
 								)}
 								{audioUrl && (
 									<MouseTarget
@@ -345,12 +339,16 @@ export function EscapeTitle({
 	title,
 	display = "show",
 	audioUrl,
-	pageLink,
+	extraLink,
+	extraLinkIcon,
+	extraLinkHint,
 }: Readonly<{
 	title?: string;
 	display?: "show" | "none";
 	audioUrl?: string;
-	pageLink?: string;
+	extraLink?: string;
+	extraLinkIcon?: React.ReactNode;
+	extraLinkHint?: { action: string; this: string } | null;
 }> &
 	({ display?: "show"; title: string } | { display: "none"; title?: string })) {
 	const context = useTitleContext();
@@ -360,8 +358,18 @@ export function EscapeTitle({
 		context.setTitle(title ?? "");
 		context.setDisplay(display ?? "show");
 		context.setAudioUrl(audioUrl ?? "");
-		context.setPageLink(pageLink ?? "");
-	}, [title, context, display, audioUrl, pageLink]);
+		context.setExtraLink(extraLink ?? "");
+		context.setExtraLinkIcon(extraLinkIcon ?? null);
+		context.setExtraLinkHint(extraLinkHint ?? null);
+	}, [
+		title,
+		context,
+		display,
+		audioUrl,
+		extraLink,
+		extraLinkIcon,
+		extraLinkHint,
+	]);
 
 	return null;
 }

@@ -133,7 +133,11 @@ export default async function WritingPage({
 				<EscapeTitle
 					title={writing?.title ?? "Untitled."}
 					audioUrl={`/writing/${slug}/audio`}
-					pageLink={`https://arsenstorm.com/writing/${slug}`}
+					extraLink={`/writing/${slug}/meaning`}
+					extraLinkHint={{
+						action: "What does this",
+						this: "mean?",
+					}}
 				/>
 				<WritingPageClient markdown={markdown} />
 			</main>
