@@ -4,12 +4,29 @@ import { notFound } from "next/navigation";
 // Design
 import { EscapeTitle } from "@/components/design/escape";
 import WritingPageClient from "../page.client";
+import { Text } from "@/components/ui/text";
 
 // Utils
 import { readWriting } from "@/mdx/compile";
 import { getAllWriting } from "@/utils/get-all-writing";
 import { formatDate } from "@/utils/format-date";
-import { Text } from "@/components/ui/text";
+
+const BackSvg = () => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		className="size-5"
+		strokeWidth="2"
+		strokeLinecap="round"
+		strokeLinejoin="round"
+	>
+		<title>Back</title>
+		<path d="M19 15V9" />
+		<path d="M15 15h-3v4l-7-7 7-7v4h3v6z" />
+	</svg>
+);
 
 export default async function MeaningPage({
 	params,
@@ -44,6 +61,7 @@ export default async function MeaningPage({
 						action: "Go back to",
 						this: writing?.title ?? "Untitled.",
 					}}
+					extraLinkIcon={<BackSvg />}
 				/>
 				<WritingPageClient markdown={markdown} />
 			</main>
