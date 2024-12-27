@@ -34,11 +34,16 @@ export async function GET() {
 
 			content = content.replace(/\r\n/g, "\n").replace(/\n\n+/g, "\n\n").trim();
 
+			const meaning =
+				parts[3]?.trim() ??
+				`I haven’t written about the meaning of ${writing.title ?? "Untitled."} yet.`;
+
 			return {
 				slug: writing.slug,
 				date: writing.date,
 				title: writing.title,
 				content,
+				meaning,
 			};
 		}),
 	);
