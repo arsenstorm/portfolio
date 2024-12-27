@@ -8,6 +8,8 @@ import WritingPageClient from "../page.client";
 // Utils
 import { readWriting } from "@/mdx/compile";
 import { getAllWriting } from "@/utils/get-all-writing";
+import { formatDate } from "@/utils/format-date";
+import { Text } from "@/components/ui/text";
 
 export default async function MeaningPage({
 	params,
@@ -32,18 +34,30 @@ export default async function MeaningPage({
 		`I haven’t written about the meaning of **${writing?.title ?? "Untitled."}** yet.`;
 
 	return (
-		<main className="prose dark:prose-invert">
-			<EscapeTitle
-				title={`The meaning of ${writing?.title ?? "Untitled."}`}
-				//audioUrl={`/writing/${slug}/meaning/audio`} // TODO: Add audio for the meaning
-				extraLink={`/writing/${slug}`}
-				extraLinkHint={{
-					action: "Go back to",
-					this: writing?.title ?? "Untitled.",
-				}}
-			/>
-			<WritingPageClient markdown={markdown} />
-		</main>
+		<>
+			<main className="prose dark:prose-invert">
+				<EscapeTitle
+					title={`The meaning of ${writing?.title ?? "Untitled."}`}
+					//audioUrl={`/writing/${slug}/meaning/audio`} // TODO: Add audio for the meaning
+					extraLink={`/writing/${slug}`}
+					extraLinkHint={{
+						action: "Go back to",
+						this: writing?.title ?? "Untitled.",
+					}}
+				/>
+				<WritingPageClient markdown={markdown} />
+			</main>
+			<footer className="max-w-2xl mx-auto fixed bottom-0 left-0 right-0 px-4 py-8 flex flex-row justify-between items-center z-20 !animate-none !opacity-100">
+				<div className="flex flex-row justify-between items-center w-full">
+					<div className="flex flex-col items-center flex-1 px-4">
+						<Text>{writing?.title ?? "Untitled."}</Text>
+						<Text className="!text-xs opacity-50">
+							{formatDate(writing?.date)}
+						</Text>
+					</div>
+				</div>
+			</footer>
+		</>
 	);
 }
 
