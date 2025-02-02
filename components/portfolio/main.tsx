@@ -328,9 +328,21 @@ const projects = [
 		description: "API-first content publishing.",
 		link: "https://sotsial.com",
 	},
-	/*{
+	{
 		id: 7,
+		title: "TerrorWatch",
+		description: "Monitoring terrorism around the world.",
+		link: "https://terrorwatch.org",
+	},
+	{
+		id: 8,
+		title: "Community Notes",
+		description: "Tackling misinformation via the community.",
+		link: "https://communitynotes.dev",
+	},
+	{
+		id: 9,
 		title: "Rosel",
 		description: "A helpful voice assistant for the web.",
-	},*/
+	},
 ];
