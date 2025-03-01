@@ -282,8 +282,9 @@ function Card({
 
 const intro = [
 	<Text key="1">
-		<Strong>I’m Arsen.</Strong> I like to <Code>code</Code>. And I like to build
-		things.
+		<Strong>I’m Arsen.</Strong> I build products to{" "}
+		<span className="italic">dominate</span> the market and <Code>help</Code>{" "}
+		people.
 	</Text>,
 	<Text key="2">
 		I live in <Strong>London</Strong>, so if you’re around, you{" "}
@@ -320,7 +321,7 @@ const projects = [
 		id: 5,
 		title: "Amazonomics",
 		description: "Sell more on Amazon by seeing the trends.",
-		link: "https://beta.amazonomics.com",
+		link: "https://amazonomics.com",
 	},
 	{
 		id: 6,
@@ -330,7 +331,7 @@ const projects = [
 	},
 	{
 		id: 7,
-		title: "TerrorWatch",
+		title: "Threat Intelligence",
 		description: "Monitoring terrorism around the world.",
 		link: "https://terrorwatch.org",
 	},
