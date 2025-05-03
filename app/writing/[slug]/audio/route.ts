@@ -52,6 +52,14 @@ const getWriting = async (slug: string) => {
 		.split("\n")
 		.find((line) => line.startsWith("title:"));
 
+	const hasAudioLine = frontmatter
+		.split("\n")
+		.find((line) => line.startsWith("audio:"));
+
+	const hasAudio = hasAudioLine
+		? hasAudioLine.replace("audio:", "").trim() === "true"
+		: true;
+
 	const title = titleLine ? titleLine.replace("title:", "").trim() : "Untitled";
 
 	writing = parts[2].trim();
@@ -108,6 +116,7 @@ const getWriting = async (slug: string) => {
 		title,
 		writing,
 		speakers,
+		hasAudio,
 	};
 };
 
@@ -221,7 +230,12 @@ export async function GET(
 		audioData = Buffer.concat(chunks);
 	} catch (error) {
 		console.warn(`An audio file for ${slug} does not exist.`);
-		const { title, writing, speakers } = await getWriting(slug);
+		const {
+			title,
+			writing,
+			speakers,
+			hasAudio = true,
+		} = await getWriting(slug);
 
 		if (!writing) {
 			return NextResponse.json(
@@ -230,7 +244,7 @@ export async function GET(
 			);
 		}
 
-		if (writing.includes("audio: false")) {
+		if (!hasAudio) {
 			return NextResponse.json(
 				{ error: "This writing does not have audio." },
 				{ status: 400 },
