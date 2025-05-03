@@ -230,6 +230,13 @@ export async function GET(
 			);
 		}
 
+		if (writing.includes("audio: false")) {
+			return NextResponse.json(
+				{ error: "This writing does not have audio." },
+				{ status: 400 },
+			);
+		}
+
 		const text = `1: "${title}"\n<break time="1.0s" />\n${writing}`;
 		console.warn(text);
 

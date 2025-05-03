@@ -24,172 +24,130 @@ export default function Portfolio({
 	readonly lastVisitor?: string;
 }) {
 	const { device } = useCommandKey();
-	let indexCount = 2;
 
 	return (
-		<div className="orchestration flex flex-col gap-y-4">
-			{intro.map((item) => {
-				indexCount++;
-
-				return (
-					<div
-						key={item.key}
-						style={
-							{
-								"--stagger-index": indexCount,
-							} as React.CSSProperties
-						}
+		<div className="flex flex-col gap-y-4 orchestration">
+			{/* Intro */}
+			<div style={{ "--stagger-index": 1 } as React.CSSProperties}>
+				<Text>
+					<Strong>I’m Arsen.</Strong> I build products to{" "}
+					<span className="italic">dominate</span> the market and{" "}
+					<Code>help</Code> people.
+				</Text>
+			</div>
+			<div style={{ "--stagger-index": 2 } as React.CSSProperties}>
+				<Text>
+					I live in <Strong>London</Strong>, so if you’re around, you{" "}
+					<span className="italic">might</span> see me.
+				</Text>
+			</div>
+			<div style={{ "--stagger-index": 3 } as React.CSSProperties}>
+				<Text>
+					I’m the CTO of <Strong>Anyverse</Strong> – here’s{" "}
+					<TextLink
+						href="/writing/everything"
+						mouse={{ action: "Read", this: "my writings" }}
 					>
-						{item}
-					</div>
-				);
-			})}
-			<Divider
-				className="my-4"
-				style={
-					{
-						"--stagger-index": indexCount + 1,
-					} as React.CSSProperties
-				}
-			/>
-			<Subheading
-				level={2}
-				style={
-					{
-						"--stagger-index": indexCount + 2,
-					} as React.CSSProperties
-				}
-			>
-				Building
-			</Subheading>
-			<Text
-				style={
-					{
-						"--stagger-index": indexCount + 3,
-					} as React.CSSProperties
-				}
-			>
-				I build a lot of things; here’s a few:
-			</Text>
-			<ul
-				className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 orchestration"
-				style={
-					{
-						"--stagger-index": indexCount + 4,
-					} as React.CSSProperties
-				}
-			>
-				{projects.map((project) => {
-					indexCount++;
+						why
+					</TextLink>
+					.
+				</Text>
+			</div>
 
-					return (
-						<li
-							key={project.id}
-							style={
-								{
-									"--stagger-index": indexCount,
-								} as React.CSSProperties
-							}
-						>
-							<Card className="h-full">
-								{project.link ? (
-									<Text className="inline-flex items-center">
-										<TextLink
-											href={project.link}
-											target="_blank"
-											rel="noopener noreferrer"
-											mouse={{ action: "Visit", this: project.title }}
-											className="underline"
-										>
-											{project.title}
-										</TextLink>
-										<OpenInNewTab className="size-4 ml-1" />
-									</Text>
-								) : (
-									<Text>
-										<Strong>{project.title}</Strong>
-									</Text>
-								)}
-								<Text>{project.description}</Text>
-							</Card>
-						</li>
-					);
-				})}
+			<Divider
+				className="my-4"
+				style={{ "--stagger-index": 4 } as React.CSSProperties}
+			/>
+
+			{/* Projects */}
+			<Subheading
+				level={2}
+				style={{ "--stagger-index": 5 } as React.CSSProperties}
+			>
+				Past Projects
+			</Subheading>
+			<Text style={{ "--stagger-index": 6 } as React.CSSProperties}>
+				I’ve built a lot of things; here’s a few:
+			</Text>
+			<ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 orchestration">
+				{projects.map((project, index) => (
+					<li
+						key={project.id}
+						style={{ "--stagger-index": index + 7 } as React.CSSProperties}
+					>
+						<Card className="h-full">
+							{project.link ? (
+								<Text className="inline-flex items-center">
+									<TextLink
+										href={project.link}
+										target="_blank"
+										rel="noopener noreferrer"
+										mouse={{ action: "Visit", this: project.title }}
+										className="underline"
+									>
+										{project.title}
+									</TextLink>
+									<OpenInNewTab className="size-4 ml-1" />
+								</Text>
+							) : (
+								<Text>
+									<Strong>{project.title}</Strong>
+								</Text>
+							)}
+							<Text>{project.description}</Text>
+						</Card>
+					</li>
+				))}
 			</ul>
+
 			<Divider
 				className="my-4"
 				style={
-					{
-						"--stagger-index": indexCount + 1,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length } as React.CSSProperties
 				}
 			/>
+
+			{/* Experiments */}
 			<Subheading
 				level={2}
 				style={
-					{
-						"--stagger-index": indexCount + 2,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 1 } as React.CSSProperties
 				}
 			>
 				Experiments
 			</Subheading>
 			<Text
 				style={
-					{
-						"--stagger-index": indexCount + 3,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 2 } as React.CSSProperties
 				}
 			>
 				If you’re fortunate enough to stumble across my site when others are
 				around, you’ll see <Strong>everyone else’s</Strong> cursor flying
 				around!
 			</Text>
-			<WhereIsLastVisitor
-				lastVisitor={lastVisitor}
-				style={
-					{
-						"--stagger-index": indexCount + 4,
-					} as React.CSSProperties
-				}
-			/>
-			<VisitorsGlobe
-				style={
-					{
-						"--stagger-index": indexCount + 5,
-					} as React.CSSProperties
-				}
-			/>
-			<EmailMe
-				style={
-					{
-						"--stagger-index": indexCount + 6,
-					} as React.CSSProperties
-				}
-			/>
+			<WhereIsLastVisitor lastVisitor={lastVisitor} style={{}} />
+			<VisitorsGlobe style={{}} />
+			<EmailMe style={{}} />
+
 			<Divider
 				className="my-4"
 				style={
-					{
-						"--stagger-index": indexCount + 7,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 4 } as React.CSSProperties
 				}
 			/>
+
+			{/* Writing */}
 			<Subheading
 				level={2}
 				style={
-					{
-						"--stagger-index": indexCount + 8,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 5 } as React.CSSProperties
 				}
 			>
 				Writing
 			</Subheading>
 			<Text
 				style={
-					{
-						"--stagger-index": indexCount + 9,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 6 } as React.CSSProperties
 				}
 			>
 				I sometimes write stuff. You can find it{" "}
@@ -208,29 +166,26 @@ export default function Portfolio({
 				) : null}
 				.
 			</Text>
+
 			<Divider
 				className="my-4"
 				style={
-					{
-						"--stagger-index": indexCount + 10,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 7 } as React.CSSProperties
 				}
 			/>
+
+			{/* Connect */}
 			<Subheading
 				level={2}
 				style={
-					{
-						"--stagger-index": indexCount + 11,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 8 } as React.CSSProperties
 				}
 			>
 				Connect
 			</Subheading>
 			<Text
 				style={
-					{
-						"--stagger-index": indexCount + 12,
-					} as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 9 } as React.CSSProperties
 				}
 			>
 				I’m on{" "}

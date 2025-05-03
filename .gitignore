@@ -38,3 +38,7 @@ bun.lockb
 
 # future work
 writings-future/*.mdx
+
+# env
+.env*
+!.env*.example
