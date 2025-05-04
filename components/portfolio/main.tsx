@@ -125,14 +125,33 @@ export default function Portfolio({
 				around, you’ll see <Strong>everyone else’s</Strong> cursor flying
 				around!
 			</Text>
-			<WhereIsLastVisitor lastVisitor={lastVisitor} style={{}} />
-			<VisitorsGlobe style={{}} />
-			<EmailMe style={{}} />
+			<WhereIsLastVisitor
+				lastVisitor={lastVisitor}
+				style={
+					{
+						"--stagger-index": 5 + projects.length + 3,
+					} as React.CSSProperties
+				}
+			/>
+			<VisitorsGlobe
+				style={
+					{
+						"--stagger-index": 5 + projects.length + 4,
+					} as React.CSSProperties
+				}
+			/>
+			<EmailMe
+				style={
+					{
+						"--stagger-index": 5 + projects.length + 5,
+					} as React.CSSProperties
+				}
+			/>
 
 			<Divider
 				className="my-4"
 				style={
-					{ "--stagger-index": 5 + projects.length + 4 } as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 6 } as React.CSSProperties
 				}
 			/>
 
@@ -140,14 +159,14 @@ export default function Portfolio({
 			<Subheading
 				level={2}
 				style={
-					{ "--stagger-index": 5 + projects.length + 5 } as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 7 } as React.CSSProperties
 				}
 			>
 				Writing
 			</Subheading>
 			<Text
 				style={
-					{ "--stagger-index": 5 + projects.length + 6 } as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 8 } as React.CSSProperties
 				}
 			>
 				I sometimes write stuff. You can find it{" "}
@@ -170,7 +189,7 @@ export default function Portfolio({
 			<Divider
 				className="my-4"
 				style={
-					{ "--stagger-index": 5 + projects.length + 7 } as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 9 } as React.CSSProperties
 				}
 			/>
 
@@ -178,14 +197,14 @@ export default function Portfolio({
 			<Subheading
 				level={2}
 				style={
-					{ "--stagger-index": 5 + projects.length + 8 } as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 10 } as React.CSSProperties
 				}
 			>
 				Connect
 			</Subheading>
 			<Text
 				style={
-					{ "--stagger-index": 5 + projects.length + 9 } as React.CSSProperties
+					{ "--stagger-index": 5 + projects.length + 11 } as React.CSSProperties
 				}
 			>
 				I’m on{" "}
