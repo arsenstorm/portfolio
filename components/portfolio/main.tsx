@@ -281,9 +281,9 @@ const projects = [
 	},
 	{
 		id: 3,
-		title: "Socrasica",
+		title: "World Class",
 		description: "Helping students apply to university.",
-		link: "https://socrasica.com",
+		link: "https://worldclass.international",
 	},
 	{
 		id: 4,
